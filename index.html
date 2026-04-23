@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OTS · Ordenamiento Territorial Sostenible</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #0B242C; }
+  body { font-family: "Archivo", sans-serif; color: #0B3D4F; -webkit-font-smoothing: antialiased; }
+  a:hover { opacity: 0.8; }
+  input:focus, textarea:focus { border-bottom-color: #C47A3D !important; }
+  ::selection { background: #C47A3D; color: #fff; }
+  html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" data-presets="react">
+
+// ═══════════════════════════════════════════════════════════════
+// OTS WEBSITE — single-file React app
+// ═══════════════════════════════════════════════════════════════
+
+const FUSION_PRIMARY = '#0B3D4F';
+const FUSION_ACCENT = '#C47A3D';
+const FUSION_BG = '#EEE9D8';
+
+// ─── LOGO ────────────────────────────────────────────────────
+function FusionMark({ size = 56, onDark = true }) {
+  const color = onDark ? '#E8E6DC' : FUSION_PRIMARY;
+  return (
+    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
+      <g stroke={color} strokeWidth="1" opacity="0.25">
+        <path d="M 50 8 L 50 14" />
+        <path d="M 50 86 L 50 92" />
+        <path d="M 8 50 L 14 50" />
+        <path d="M 86 50 L 92 50" />
+      </g>
+      <g stroke={color} strokeWidth="1.6" fill="none" strokeLinecap="round">
+        <path d="M 18 52 Q 20 28, 48 26 Q 78 26, 82 50 Q 80 72, 52 74 Q 22 74, 18 52 Z" opacity="0.16" />
+        <path d="M 24 52 Q 26 34, 49 32 Q 74 32, 77 50 Q 75 68, 52 70 Q 28 70, 24 52 Z" opacity="0.30" />
+        <path d="M 30 52 Q 32 40, 50 38 Q 69 38, 71 50 Q 70 64, 52 66 Q 34 66, 30 52 Z" opacity="0.50" />
+        <path d="M 36 52 Q 38 45, 50 44 Q 63 44, 65 51 Q 64 60, 52 61 Q 40 61, 36 52 Z" opacity="0.80" />
+      </g>
+      <circle cx="50" cy="52" r="5" fill={color} />
+      <circle cx="50" cy="52" r="2" fill={FUSION_ACCENT} />
+    </svg>);
+
+}
+
+function FusionLockup({ compact = false, onDark = true }) {
+  const color = onDark ? '#E8E6DC' : FUSION_PRIMARY;
+  const muted = onDark ? 'rgba(232,230,220,.65)' : '#5A6B72';
+  const border = onDark ? 'rgba(232,230,220,.25)' : 'rgba(11,61,79,.2)';
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: compact ? 12 : 16, fontFamily: '"Archivo", sans-serif' }}>
+      <FusionMark size={compact ? 40 : 56} onDark={onDark} />
+      <div style={{ borderLeft: `1px solid ${border}`, paddingLeft: compact ? 10 : 14 }}>
+        <div style={{ fontSize: compact ? 16 : 22, fontWeight: 800, color, letterSpacing: -0.5, lineHeight: 1 }}>
+          OTS<span style={{ color: FUSION_ACCENT }}>.</span>
+        </div>
+        <div style={{ fontSize: compact ? 7.5 : 9, color: muted, letterSpacing: 1.6, marginTop: compact ? 3 : 5, textTransform: 'uppercase', fontWeight: 500 }}>
+          Ordenamiento Territorial Sostenible
+        </div>
+      </div>
+    </div>);
+
+}
+
+// ─── DATA ────────────────────────────────────────────────────
+const SERVICIOS = [
+{ num: '01', titulo: 'Formulación de proyectos de inversión', titulo_en: 'Investment project formulation',
+  desc: 'Estructuración metodológica (MGA) y radicación en Banco de Proyectos del SGR, DNP y entes territoriales.',
+  desc_en: 'Methodological structuring (MGA) and submission to Project Banks at SGR, DNP and territorial levels.' },
+{ num: '02', titulo: 'Planes de Ordenamiento Territorial', titulo_en: 'Territorial Planning instruments (POT)',
+  desc: 'Formulación, revisión y ajuste de POT, PBOT y EOT — con enfoque de determinantes ambientales y gestión del riesgo.',
+  desc_en: 'Formulation, review and adjustment of POT, PBOT and EOT — with environmental and risk-management focus.' },
+{ num: '03', titulo: 'Evaluación ambiental', titulo_en: 'Environmental assessment',
+  desc: 'Estudios de Impacto Ambiental (EIA), Planes de Manejo (PMA) y acompañamiento en procesos de licenciamiento ante la ANLA y CARs.',
+  desc_en: 'Environmental Impact Assessments (EIA), Management Plans (PMA) and licensing support before ANLA and CARs.' },
+{ num: '04', titulo: 'Planes de gestión del riesgo', titulo_en: 'Risk management plans',
+  desc: 'Formulación de PMGRD municipales y departamentales con análisis de amenaza, vulnerabilidad y medidas de reducción.',
+  desc_en: 'Municipal and departmental PMGRD with hazard, vulnerability and reduction-measures analysis.' },
+{ num: '05', titulo: 'Participación ciudadana', titulo_en: 'Citizen participation',
+  desc: 'Diseño e implementación de procesos participativos, mesas de trabajo y consulta previa con comunidades étnicas.',
+  desc_en: 'Design and implementation of participatory processes, working tables and prior consultation with ethnic communities.' },
+{ num: '06', titulo: 'Planes de desarrollo municipales', titulo_en: 'Municipal development plans',
+  desc: 'Formulación, armonización y seguimiento de Planes de Desarrollo Municipal (PDM) alineados con instrumentos superiores.',
+  desc_en: 'Formulation, harmonization and monitoring of Municipal Development Plans aligned with higher-level instruments.' },
+{ num: '07', titulo: 'Asesoría a entes territoriales', titulo_en: 'Advisory to local governments',
+  desc: 'Acompañamiento técnico a alcaldías y gobernaciones en diagnóstico, priorización y gestión de recursos.',
+  desc_en: 'Technical support to municipalities and departments in diagnosis, prioritization and resource management.' }];
+
+
+const CRONOLOGIA = [
+{ fecha: 'Marzo 2024', fecha_en: 'March 2024', estado: 'hito',
+  titulo: 'Constitución de OTS S.A.S', titulo_en: 'OTS S.A.S incorporation',
+  desc: 'La firma se constituye formalmente con foco en consultoría ambiental y ordenamiento territorial.',
+  desc_en: 'The firm is formally incorporated with a focus on environmental and territorial-planning consulting.' },
+{ fecha: '2024 · Q2–Q3', fecha_en: '2024 · Q2–Q3', estado: 'en-curso',
+  titulo: 'Participación en convocatoria de Macroproyectos', titulo_en: 'First Macroprojects call participation',
+  desc: 'Primera participación en convocatoria del Ministerio de Ambiente y Desarrollo Sostenible para Macroproyectos de inversión ambiental.',
+  desc_en: 'First participation in the Ministry of Environment national call for environmental investment Macroprojects.' },
+{ fecha: '2024 · Q4', fecha_en: '2024 · Q4', estado: 'en-curso',
+  titulo: 'Propuesta técnica — Alcaldía de Mariquita (Tolima)', titulo_en: 'Technical proposal — Mariquita (Tolima)',
+  desc: 'Radicación de propuesta de trabajo para instrumentos de planificación territorial en el municipio.',
+  desc_en: 'Submission of a work proposal for territorial planning instruments in the municipality.' },
+{ fecha: '2025 · Q1', fecha_en: '2025 · Q1', estado: 'en-curso',
+  titulo: 'Propuestas — Prado, Campoalegre, Paicol, San Agustín', titulo_en: 'Proposals — Prado, Campoalegre, Paicol, San Agustín',
+  desc: 'Presentación de propuestas técnicas a cuatro alcaldías del Tolima y Huila para formulación de instrumentos de OT y PMGRD.',
+  desc_en: 'Technical proposals submitted to four municipalities across Tolima and Huila for OT and PMGRD instruments.' },
+{ fecha: '2025 · Q3', fecha_en: '2025 · Q3', estado: 'en-curso',
+  titulo: 'Segunda convocatoria — Macroproyectos MinAmbiente', titulo_en: 'Second Macroprojects call — MinAmbiente',
+  desc: 'Segunda participación en convocatoria nacional, consolidando capacidad técnica y portafolio institucional.',
+  desc_en: 'Second participation in the national call, consolidating technical capacity and institutional portfolio.' },
+{ fecha: 'Hoy', fecha_en: 'Today', estado: 'presente',
+  titulo: 'Pipeline activo', titulo_en: 'Active pipeline',
+  desc: 'Varias propuestas en evaluación y gestiones comerciales en curso. Abiertos a nuevas convocatorias y alianzas.',
+  desc_en: 'Several proposals under evaluation and commercial engagements in progress. Open to new calls and partnerships.' }];
+
+
+const GESTIONES_MAPA = [
+{ id: 'bog', nombre: 'Bogotá D.C. · MinAmbiente', x: 150, y: 165, estado: 'gestion' },
+{ id: 'tol', nombre: 'Tolima · Mariquita, Prado', x: 128, y: 172, estado: 'propuesta' },
+{ id: 'hui', nombre: 'Huila · Campoalegre, Paicol, San Agustín', x: 120, y: 202, estado: 'propuesta' }];
+
+
+const METODOLOGIA = [
+{ fase: '01', nombre: 'Diagnóstico', nombre_en: 'Diagnosis',
+  desc: 'Caracterización biofísica, socioeconómica e institucional del territorio. Análisis de instrumentos vigentes.',
+  desc_en: 'Biophysical, socioeconomic and institutional characterization. Review of existing instruments.' },
+{ fase: '02', nombre: 'Formulación', nombre_en: 'Formulation',
+  desc: 'Construcción participativa de objetivos, estrategias, programas y proyectos con enfoque diferencial.',
+  desc_en: 'Participatory construction of objectives, strategies, programs and projects with a differential approach.' },
+{ fase: '03', nombre: 'Estructuración', nombre_en: 'Structuring',
+  desc: 'Diseño técnico, financiero y jurídico. Radicación en bancos de proyectos y gestión de recursos.',
+  desc_en: 'Technical, financial and legal design. Submission to project banks and resource mobilization.' },
+{ fase: '04', nombre: 'Ejecución y evaluación', nombre_en: 'Execution & evaluation',
+  desc: 'Acompañamiento en la implementación, seguimiento a indicadores y evaluación ex-post de resultados.',
+  desc_en: 'Implementation support, indicator monitoring and ex-post evaluation of results.' }];
+
+
+const PRINCIPIOS = [
+{ t: 'Rigor técnico', t_en: 'Technical rigor',
+  d: 'Metodologías oficiales (MGA, DNP, MinAmbiente) y estándares académicos verificables.',
+  d_en: 'Official methodologies (MGA, DNP, MinAmbiente) and verifiable academic standards.' },
+{ t: 'Enfoque territorial', t_en: 'Territorial focus',
+  d: 'Cada territorio es único. Diagnósticos construidos en campo, no en escritorio.',
+  d_en: 'Each territory is unique. Field-built diagnoses, not desk-built.' },
+{ t: 'Sostenibilidad', t_en: 'Sustainability',
+  d: 'Los proyectos que formulamos integran las determinantes ambientales como punto de partida.',
+  d_en: 'Every project we formulate integrates environmental determinants as its starting point.' },
+{ t: 'Transparencia', t_en: 'Transparency',
+  d: 'Productos trazables, documentados y entregados en plazos acordados.',
+  d_en: 'Traceable, documented outputs delivered on agreed timelines.' }];
+
+
+// ─── COLOMBIA MAP ────────────────────────────────────────────
+// Silueta real de Colombia en viewBox 280x340. Trazado siguiendo puntos geográficos:
+// Guajira NE, Caribe N, Chocó W cóncavo, Nariño SW, Leticia punta S, Amazonas/Vaupés SE, Guainía E.
+function ColombiaMap({ onDark = false }) {
+  const [hover, setHover] = React.useState(null);
+  const stroke = onDark ? 'rgba(232,230,220,.55)' : 'rgba(11,61,79,.55)';
+  const fill = onDark ? 'rgba(232,230,220,.06)' : 'rgba(11,61,79,.06)';
+  const ink = onDark ? '#E8E6DC' : '#0B3D4F';
+  // Path basado en coordenadas geográficas aproximadas proyectadas a viewBox 280x340
+  const d = [
+  // Punta norte Guajira
+  'M 188 14',
+  'L 196 26',
+  'L 182 38',
+  // Baja por Guajira hacia Riohacha/Santa Marta
+  'L 170 36',
+  'L 158 48',
+  // Ciénaga, Barranquilla, Cartagena (costa Caribe)
+  'L 140 44',
+  'L 122 50',
+  'L 108 56',
+  'L 92 58',
+  // Golfo de Urabá / entrada al Darien
+  'L 78 64',
+  'L 68 74',
+  'L 60 82',
+  // Darien / Chocó norte
+  'L 52 92',
+  'L 46 104',
+  // Cabo Corrientes (Chocó - saliente oeste)
+  'L 38 118',
+  'L 42 132',
+  // Buenaventura / Valle
+  'L 48 148',
+  'L 52 164',
+  // Costa Cauca/Nariño
+  'L 58 180',
+  'L 64 196',
+  'L 54 212',
+  // Tumaco - esquina SW
+  'L 62 224',
+  // Frontera con Ecuador, subida a Putumayo
+  'L 82 228',
+  'L 96 232',
+  // Putumayo hacia Caquetá sur, bajando al trapecio amazónico
+  'L 110 246',
+  'L 126 260',
+  'L 142 274',
+  'L 156 286',
+  // Leticia - punta sur del trapecio amazónico
+  'L 172 306',
+  'L 182 314',
+  // Sube por frontera Brasil-Perú (borde oriental del trapecio)
+  'L 190 292',
+  'L 198 272',
+  'L 208 254',
+  // Vaupés / Guainía - borde este
+  'L 222 230',
+  'L 234 210',
+  'L 246 190',
+  // Guainía punta este (Piedra del Cocuy)
+  'L 252 166',
+  'L 248 148',
+  // Río Orinoco - frontera con Venezuela
+  'L 236 134',
+  'L 224 120',
+  'L 216 106',
+  // Vichada / Arauca
+  'L 222 94',
+  'L 214 82',
+  // Norte de Santander / Catatumbo
+  'L 198 74',
+  'L 186 64',
+  'L 174 56',
+  // Regreso al norte por la Serranía del Perijá
+  'L 168 42',
+  'L 176 30',
+  'L 184 20',
+  'Z'].
+  join(' ');
+
+  return (
+    <div style={{ position: 'relative', width: '100%' }}>
+      <svg viewBox="0 0 280 340" style={{ width: '100%', height: 'auto', display: 'block', maxHeight: 460 }}>
+        <path d={d} fill={fill} stroke={stroke} strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round" />
+        {/* Líneas de latitud sutiles */}
+        <g stroke={stroke} strokeWidth="0.4" strokeDasharray="1.5 3" opacity="0.35">
+          <line x1="30" y1="100" x2="260" y2="100" />
+          <line x1="30" y1="170" x2="260" y2="170" />
+          <line x1="30" y1="240" x2="260" y2="240" />
+        </g>
+        {GESTIONES_MAPA.map((g) =>
+        <g key={g.id} onMouseEnter={() => setHover(g.id)} onMouseLeave={() => setHover(null)} style={{ cursor: 'pointer' }}>
+            {g.estado === 'propuesta' &&
+          <circle cx={g.x} cy={g.y} r="9" fill={FUSION_ACCENT} opacity="0.2">
+                <animate attributeName="r" values="6;13;6" dur="2.4s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.4;0;0.4" dur="2.4s" repeatCount="indefinite" />
+              </circle>
+          }
+            <circle cx={g.x} cy={g.y} r={g.estado === 'propuesta' ? 4 : 3}
+          fill={g.estado === 'propuesta' ? FUSION_ACCENT : ink}
+          stroke={onDark ? '#14242C' : '#fff'} strokeWidth="1" />
+            {hover === g.id &&
+          <g>
+                <rect x={g.x + 7} y={g.y - 14} width={g.nombre.length * 3.2 + 8} height="10" fill={ink} rx="1.5" />
+                <text x={g.x + 10.5} y={g.y - 7} fontFamily='"Archivo", sans-serif' fontSize="6" fill={onDark ? '#14242C' : '#fff'} fontWeight="600">
+                  {g.nombre}
+                </text>
+              </g>
+          }
+          </g>
+        )}
+      </svg>
+    </div>);
+
+}
+
+// ─── HEADER ──────────────────────────────────────────────────
+const NAV_LINK = { color: 'inherit', textDecoration: 'none', transition: 'color .15s' };
+
+function Header({ lang, setLang }) {
+  const t = lang === 'en' ?
+  { services: 'Services', about: 'About', portfolio: 'Work', contact: 'Contact', cta: 'Get in touch' } :
+  { services: 'Servicios', about: 'Nosotros', portfolio: 'Trayectoria', contact: 'Contacto', cta: 'Hablemos' };
+  return (
+    <header style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(11,36,44,0.82)', backdropFilter: 'blur(16px)',
+      borderBottom: '1px solid rgba(232,230,220,.08)', fontFamily: '"Archivo", sans-serif' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '14px 40px', display: 'flex', alignItems: 'center', gap: 40 }}>
+        <FusionLockup compact onDark />
+        <nav style={{ marginLeft: 'auto', display: 'flex', gap: 28, alignItems: 'center', fontSize: 13, color: 'rgba(232,230,220,.75)' }}>
+          <a href="#servicios" style={NAV_LINK}>{t.services}</a>
+          <a href="#nosotros" style={NAV_LINK}>{t.about}</a>
+          <a href="#trayectoria" style={NAV_LINK}>{t.portfolio}</a>
+          <a href="#contacto" style={NAV_LINK}>{t.contact}</a>
+          <div style={{ display: 'flex', gap: 1, background: 'rgba(232,230,220,.08)', borderRadius: 2, padding: 2 }}>
+            {['es', 'en'].map((l) =>
+            <button key={l} onClick={() => setLang(l)}
+            style={{ border: 'none', background: lang === l ? FUSION_ACCENT : 'transparent',
+              color: lang === l ? '#fff' : 'rgba(232,230,220,.6)', padding: '4px 8px', fontSize: 10,
+              fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 1, cursor: 'pointer', borderRadius: 1 }}>
+                {l.toUpperCase()}
+              </button>
+            )}
+          </div>
+          <a href="#contacto" style={{ background: FUSION_ACCENT, color: '#fff', padding: '9px 16px',
+            fontSize: 12, fontWeight: 600, textDecoration: 'none', borderRadius: 2 }}>
+            {t.cta} →
+          </a>
+        </nav>
+      </div>
+    </header>);
+
+}
+
+// ─── HERO ────────────────────────────────────────────────────
+function Hero({ lang }) {
+  const t = lang === 'en' ? {
+    eyebrow: 'Environmental & territorial consulting · Colombia',
+    h1a: 'We plan the', h1b: 'territory', h1c: 'we want to inhabit',
+    sub: 'We formulate, execute and evaluate investment projects in territorial planning and environmental management for local governments, ministries and multilateral agencies.',
+    cta1: 'View our work', cta2: 'Services', since: 'Working since March 2024'
+  } : {
+    eyebrow: 'Consultoría ambiental y territorial · Colombia',
+    h1a: 'Planificamos el', h1b: 'territorio', h1c: 'que queremos habitar',
+    sub: 'Formulamos, ejecutamos y evaluamos proyectos de inversión en ordenamiento territorial y gestión ambiental para entes territoriales, ministerios y agencias multilaterales.',
+    cta1: 'Ver trayectoria', cta2: 'Servicios', since: 'Operando desde marzo 2024'
+  };
+  return (
+    <section style={{ background: '#0B242C', color: '#E8E6DC', position: 'relative', overflow: 'hidden',
+      padding: '100px 40px 120px', fontFamily: '"Archivo", sans-serif' }}>
+      <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0.14, pointerEvents: 'none' }} viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+        <g stroke="#E8E6DC" strokeWidth="0.7" fill="none">
+          <path d="M -100 400 Q 200 200, 600 300 Q 1000 400, 1400 250" />
+          <path d="M -100 460 Q 200 280, 600 360 Q 1000 440, 1400 320" />
+          <path d="M -100 520 Q 200 360, 600 420 Q 1000 480, 1400 390" />
+          <path d="M -100 580 Q 200 440, 600 480 Q 1000 520, 1400 460" />
+          <path d="M -100 640 Q 200 520, 600 540 Q 1000 560, 1400 530" />
+          <path d="M -100 340 Q 200 120, 600 240 Q 1000 360, 1400 180" />
+          <path d="M -100 280 Q 200 40, 600 180 Q 1000 320, 1400 110" />
+        </g>
+      </svg>
+      <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative' }}>
+        <div style={{ fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', color: FUSION_ACCENT,
+          fontFamily: '"IBM Plex Mono", monospace', marginBottom: 28 }}>
+          {t.eyebrow}
+        </div>
+        <h1 style={{ fontSize: 72, fontWeight: 800, lineHeight: 1.02, letterSpacing: -2, margin: 0, maxWidth: 980 }}>
+          {t.h1a} <span style={{ fontStyle: 'italic', fontWeight: 500, color: FUSION_ACCENT }}>{t.h1b}</span><br />
+          {t.h1c}
+        </h1>
+        <p style={{ fontSize: 18, lineHeight: 1.55, color: 'rgba(232,230,220,.72)', marginTop: 32, maxWidth: 680 }}>
+          {t.sub}
+        </p>
+        <div style={{ marginTop: 42, display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap' }}>
+          <a href="#trayectoria" style={{ background: FUSION_ACCENT, color: '#fff', padding: '14px 22px',
+            fontSize: 14, fontWeight: 600, textDecoration: 'none', borderRadius: 2 }}>
+            {t.cta1} →
+          </a>
+          <a href="#servicios" style={{ border: '1px solid rgba(232,230,220,.25)', color: '#E8E6DC',
+            padding: '13px 22px', fontSize: 14, textDecoration: 'none', borderRadius: 2 }}>
+            {t.cta2}
+          </a>
+          <div style={{ marginLeft: 'auto', fontSize: 10, fontFamily: '"IBM Plex Mono", monospace',
+            letterSpacing: 1.5, color: 'rgba(232,230,220,.45)' }}>
+            ◦ {t.since}
+          </div>
+        </div>
+      </div>
+    </section>);
+
+}
+
+// ─── MARQUEE ─────────────────────────────────────────────────
+function Marquee({ lang }) {
+  const label = lang === 'en' ? 'Proposals submitted to / active engagements with' : 'Propuestas y gestiones activas con';
+  const items = ['Ministerio de Ambiente y Desarrollo Sostenible', 'Alcaldía de Mariquita', 'Alcaldía de Prado',
+  'Alcaldía de Campoalegre', 'Alcaldía de Paicol', 'Alcaldía de San Agustín'];
+  return (
+    <section style={{ background: '#14242C', padding: '32px 40px', borderTop: '1px solid rgba(232,230,220,.05)',
+      borderBottom: '1px solid rgba(232,230,220,.05)', fontFamily: '"Archivo", sans-serif' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <div style={{ fontSize: 10, letterSpacing: 2, textTransform: 'uppercase', color: 'rgba(232,230,220,.45)',
+          fontFamily: '"IBM Plex Mono", monospace', marginBottom: 14 }}>
+          {label}
+        </div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px 28px' }}>
+          {items.map((x, i) =>
+          <span key={i} style={{ fontSize: 15, color: 'rgba(232,230,220,.82)', fontWeight: 500, display: 'flex', alignItems: 'center', gap: 10 }}>
+              {x}
+              {i < items.length - 1 && <span style={{ color: 'rgba(232,230,220,.2)' }}>
+</span>}
+            </span>)}
+        </div>
+      </div>
+    </section>);
+
+}
+
+// ─── SERVICIOS ───────────────────────────────────────────────
+function Servicios({ lang }) {
+  const t = lang === 'en' ?
+  { eyebrow: 'Services', h: 'What we do',
+    sub: 'Seven service lines built around a single objective: turning territorial knowledge into well-formulated public investment.' } :
+  { eyebrow: 'Servicios', h: 'Lo que hacemos',
+    sub: 'Siete líneas de servicio alrededor de un mismo objetivo: convertir el conocimiento territorial en inversión pública bien formulada.' };
+  return (
+    <section id="servicios" style={{ background: FUSION_BG, padding: '110px 40px', fontFamily: '"Archivo", sans-serif' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 60, marginBottom: 60, alignItems: 'end' }}>
+          <div>
+            <div style={{ fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', color: FUSION_ACCENT,
+              fontFamily: '"IBM Plex Mono", monospace', marginBottom: 18 }}>◦ {t.eyebrow}</div>
+            <h2 style={{ fontSize: 52, fontWeight: 800, color: FUSION_PRIMARY, letterSpacing: -1.5, margin: 0, lineHeight: 1.05 }}>{t.h}</h2>
+          </div>
+          <p style={{ fontSize: 17, color: '#2C4A54', lineHeight: 1.55, margin: 0, maxWidth: 560 }}>{t.sub}</p>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 1, background: 'rgba(11,61,79,.12)', border: '1px solid rgba(11,61,79,.12)' }}>
+          {SERVICIOS.map((s) =>
+          <div key={s.num} style={{ background: FUSION_BG, padding: '32px 28px', display: 'flex', gap: 20 }}>
+              <div style={{ fontSize: 13, color: FUSION_ACCENT, fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 1, fontWeight: 500, flexShrink: 0, paddingTop: 4 }}>
+                {s.num}
+              </div>
+              <div>
+                <div style={{ fontSize: 19, fontWeight: 700, color: FUSION_PRIMARY, letterSpacing: -0.3, lineHeight: 1.25 }}>
+                  {lang === 'en' ? s.titulo_en : s.titulo}
+                </div>
+                <div style={{ fontSize: 14, color: '#2C4A54', opacity: 0.78, lineHeight: 1.55, marginTop: 10 }}>
+                  {lang === 'en' ? s.desc_en : s.desc}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>);
+
+}
+
+// ─── MAPA ────────────────────────────────────────────────────
+function MapaGestiones({ lang }) {
+  const t = lang === 'en' ? {
+    eyebrow: 'Territorial footprint', h: 'Where we are working',
+    sub: 'Active proposals with five municipalities across Tolima and Huila, and ongoing engagement with the Ministry of Environment in Bogotá through two national calls for Macroprojects.',
+    prop: 'Formal proposal submitted', gest: 'National engagement',
+    s1: 'Municipalities', s2: 'National calls', s3: 'Departments'
+  } : {
+    eyebrow: 'Cobertura territorial', h: 'Dónde estamos trabajando',
+    sub: 'Propuestas radicadas con cinco municipios de Tolima y Huila, y gestión con el Ministerio de Ambiente en Bogotá a través de dos convocatorias nacionales de Macroproyectos.',
+    prop: 'Propuesta radicada', gest: 'Gestión nacional',
+    s1: 'Municipios', s2: 'Convocatorias', s3: 'Departamentos'
+  };
+  return (
+    <section style={{ background: '#0B242C', color: '#E8E6DC', padding: '110px 40px', fontFamily: '"Archivo", sans-serif' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div style={{ fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', color: FUSION_ACCENT,
+          fontFamily: '"IBM Plex Mono", monospace', marginBottom: 18 }}>◦ {t.eyebrow}</div>
+        <h2 style={{ fontSize: 56, fontWeight: 800, letterSpacing: -1.8, margin: 0, lineHeight: 1.1, marginBottom: 28 }}>{t.h}</h2>
+        <p style={{ fontSize: 18, color: 'rgba(232,230,220,.72)', lineHeight: 1.55, marginTop: 0, maxWidth: 680, marginBottom: 60 }}>{t.sub}</p>
+
+        {/* Cards de territorios */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, marginBottom: 56 }}>
+          {[
+          { codigo: 'TOL', dep: 'Tolima', mun: ['Mariquita', 'Prado'], estado: t.prop, tipo: 'propuesta' },
+          { codigo: 'HUI', dep: 'Huila', mun: ['Campoalegre', 'Paicol', 'San Agustín'], estado: t.prop, tipo: 'propuesta' },
+          { codigo: 'DC', dep: 'Bogotá D.C.', mun: ['Ministerio de Ambiente'], estado: t.gest, tipo: 'gestion' }].
+          map((r, i) =>
+          <div key={i} style={{
+            background: 'rgba(232,230,220,.04)',
+            border: '1px solid rgba(232,230,220,.1)',
+            padding: '28px 28px 32px',
+            position: 'relative' }}>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 28 }}>
+                <div style={{
+                fontFamily: '"IBM Plex Mono", monospace',
+                fontSize: 42, fontWeight: 600, color: r.tipo === 'propuesta' ? FUSION_ACCENT : '#E8E6DC',
+                letterSpacing: -1, lineHeight: 1 }}>
+                  {r.codigo}
+                </div>
+                <div style={{
+                width: 10, height: 10, borderRadius: 5,
+                background: r.tipo === 'propuesta' ? FUSION_ACCENT : '#E8E6DC',
+                marginTop: 8 }} />
+
+              </div>
+              <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 14 }}>{r.dep}</div>
+              <div style={{ fontSize: 14, color: 'rgba(232,230,220,.72)', lineHeight: 1.6, marginBottom: 20 }}>
+                {r.mun.join(' · ')}
+              </div>
+              <div style={{
+              fontSize: 10, fontFamily: '"IBM Plex Mono", monospace',
+              textTransform: 'uppercase', letterSpacing: 2,
+              color: r.tipo === 'propuesta' ? FUSION_ACCENT : 'rgba(232,230,220,.6)',
+              paddingTop: 18, borderTop: '1px solid rgba(232,230,220,.1)' }}>
+                {r.estado}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Stats */}
+        <div style={{ paddingTop: 32, borderTop: '1px solid rgba(232,230,220,.12)',
+          display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 24 }}>
+          {[['5', t.s1], ['2', t.s2], ['2', t.s3]].map(([n, l], i) =>
+          <div key={i}>
+              <div style={{ fontSize: 48, fontWeight: 800, color: FUSION_ACCENT, letterSpacing: -1.5, lineHeight: 1 }}>{n}</div>
+              <div style={{ fontSize: 11, color: 'rgba(232,230,220,.6)', marginTop: 10, letterSpacing: 1.5, textTransform: 'uppercase', fontFamily: '"IBM Plex Mono", monospace' }}>{l}</div>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>);
+
+}
+
+// ─── TRAYECTORIA ─────────────────────────────────────────────
+function Trayectoria({ lang }) {
+  const t = lang === 'en' ? {
+    eyebrow: 'Track record', h: 'A young firm, moving',
+    sub: 'OTS was founded in March 2024. Here is the complete and transparent record of every engagement, proposal and call participation — nothing inflated, nothing hidden.'
+  } : {
+    eyebrow: 'Trayectoria', h: 'Una firma joven, en movimiento',
+    sub: 'OTS se fundó en marzo de 2024. Esta es la relación completa y transparente de cada gestión, propuesta y participación — sin inflar y sin esconder.'
+  };
+  const chipFor = (e) => {
+    const map = {
+      'hito': { bg: FUSION_ACCENT, fg: '#fff', label: lang === 'en' ? 'Founding' : 'Fundación' },
+      'en-curso': { bg: 'rgba(11,61,79,.1)', fg: FUSION_PRIMARY, label: lang === 'en' ? 'In progress' : 'En curso' },
+      'presente': { bg: '#0B242C', fg: '#fff', label: lang === 'en' ? 'Today' : 'Hoy' }
+    };
+    const c = map[e];
+    return <span style={{ background: c.bg, color: c.fg, padding: '3px 9px', fontSize: 10,
+      fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 600 }}>
+      {c.label}</span>;
+  };
+  return (
+    <section id="trayectoria" style={{ background: FUSION_BG, padding: '110px 40px', fontFamily: '"Archivo", sans-serif' }}>
+      <div style={{ maxWidth: 900, margin: '0 auto' }}>
+        <div style={{ fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', color: FUSION_ACCENT,
+          fontFamily: '"IBM Plex Mono", monospace', marginBottom: 18 }}>◦ {t.eyebrow}</div>
+        <h2 style={{ fontSize: 52, fontWeight: 800, color: FUSION_PRIMARY, letterSpacing: -1.5, margin: 0, lineHeight: 1.05 }}>{t.h}</h2>
+        <p style={{ fontSize: 17, color: '#2C4A54', lineHeight: 1.55, marginTop: 20, maxWidth: 660 }}>{t.sub}</p>
+        <div style={{ marginTop: 60, position: 'relative', paddingLeft: 40 }}>
+          <div style={{ position: 'absolute', left: 8, top: 8, bottom: 8, width: 1, background: 'rgba(11,61,79,.18)' }} />
+          {CRONOLOGIA.map((c, i) =>
+          <div key={i} style={{ position: 'relative', paddingBottom: i === CRONOLOGIA.length - 1 ? 0 : 38 }}>
+              <div style={{ position: 'absolute', left: -37, top: 6, width: 17, height: 17, borderRadius: 9,
+              background: FUSION_BG, border: `2px solid ${c.estado === 'hito' ? FUSION_ACCENT : c.estado === 'presente' ? FUSION_PRIMARY : 'rgba(11,61,79,.35)'}`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 6, height: 6, borderRadius: 3,
+                background: c.estado === 'hito' ? FUSION_ACCENT : c.estado === 'presente' ? FUSION_PRIMARY : 'transparent' }} />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+                <div style={{ fontSize: 12, fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 1.5, color: '#2C4A54', textTransform: 'uppercase' }}>
+                  {lang === 'en' ? c.fecha_en : c.fecha}
+                </div>
+                {chipFor(c.estado)}
+              </div>
+              <div style={{ fontSize: 22, fontWeight: 700, color: FUSION_PRIMARY, letterSpacing: -0.4, lineHeight: 1.25, marginTop: 8 }}>
+                {lang === 'en' ? c.titulo_en : c.titulo}
+              </div>
+              <div style={{ fontSize: 15, color: '#2C4A54', opacity: 0.78, lineHeight: 1.55, marginTop: 8, maxWidth: 620 }}>
+                {lang === 'en' ? c.desc_en : c.desc}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>);
+
+}
+
+// ─── NOSOTROS ────────────────────────────────────────────────
+function Nosotros({ lang }) {
+  const t = lang === 'en' ? {
+    eyebrow: 'About', h: 'A multidisciplinary team with deep territorial experience',
+    p1: 'OTS brings together economists, environmental engineers, planners and territorial specialists with combined experience advising local governments, ministries and multilateral agencies.',
+    p2: 'Our founding partner holds a Masters in Regional Development and Territorial Planning (Universidad Autónoma de Manizales), a Masters in Economics (Universidad de los Andes), and is a PhD candidate in Economics at the same institution. 16 years of teaching experience in Economics, 8 as a consultant for public entities, private firms and multilateral organizations.',
+    cred: 'Key credentials',
+    callout: 'The firm is young — founded March 2024 — but the people behind it are not.'
+  } : {
+    eyebrow: 'Nosotros', h: 'Un equipo multidisciplinario con experiencia territorial profunda',
+    p1: 'OTS reúne economistas, ingenieros ambientales, planificadores y especialistas en ordenamiento territorial con trayectoria asesorando entes territoriales, ministerios y agencias multilaterales.',
+    p2: 'Nuestro socio fundador es Economista (Universidad del Tolima), Magíster en Desarrollo Regional y Planificación del Territorio (Universidad Autónoma de Manizales), Magíster en Economía (Universidad de los Andes) y Candidato a Doctor en Economía en la misma institución. 16 años de experiencia docente en Economía y 8 años como consultor, asesor y contratista en entidades públicas, privadas y multilaterales.',
+    cred: 'Credenciales clave',
+    callout: 'La firma es joven — fundada en marzo 2024 — pero las personas detrás no lo son.'
+  };
+  return (
+    <section id="nosotros" style={{ background: '#14242C', color: '#E8E6DC', padding: '110px 40px', fontFamily: '"Archivo", sans-serif' }}>
+      <div style={{ maxWidth: 900, margin: '0 auto' }}>
+        <div style={{ fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', color: FUSION_ACCENT,
+          fontFamily: '"IBM Plex Mono", monospace', marginBottom: 18 }}>◦ {t.eyebrow}</div>
+        <h2 style={{ fontSize: 44, fontWeight: 800, letterSpacing: -1.2, margin: 0, lineHeight: 1.1, maxWidth: 760 }}>{t.h}</h2>
+        <p style={{ fontSize: 17, color: 'rgba(232,230,220,.78)', lineHeight: 1.6, marginTop: 32 }}>{t.p1}</p>
+        <p style={{ fontSize: 17, color: 'rgba(232,230,220,.78)', lineHeight: 1.6, marginTop: 20 }}>{t.p2}</p>
+        <div style={{ marginTop: 36, padding: '22px 24px', background: 'rgba(196,122,61,.1)', border: '1px solid rgba(196,122,61,.4)', borderLeft: `3px solid ${FUSION_ACCENT}` }}>
+          <div style={{ fontSize: 15, color: '#E8E6DC', lineHeight: 1.55, fontStyle: 'italic' }}>{t.callout}</div>
+        </div>
+      </div>
+    </section>);
+
+}
+
+// ─── METODOLOGÍA ─────────────────────────────────────────────
+function Metodologia({ lang }) {
+  const t = lang === 'en' ?
+  { eyebrow: 'How we work', h: 'Method, not improvisation' } :
+  { eyebrow: 'Metodología', h: 'Método, no improvisación' };
+  return (
+    <section style={{ background: FUSION_BG, padding: '110px 40px', fontFamily: '"Archivo", sans-serif' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <div style={{ fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', color: FUSION_ACCENT,
+          fontFamily: '"IBM Plex Mono", monospace', marginBottom: 18 }}>◦ {t.eyebrow}</div>
+        <h2 style={{ fontSize: 52, fontWeight: 800, color: FUSION_PRIMARY, letterSpacing: -1.5, margin: 0, lineHeight: 1.05, marginBottom: 60 }}>{t.h}</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24 }}>
+          {METODOLOGIA.map((m, i) =>
+          <div key={i} style={{ background: '#fff', padding: '32px 26px', borderTop: `3px solid ${FUSION_ACCENT}`, minHeight: 240 }}>
+              <div style={{ fontSize: 12, color: FUSION_ACCENT, fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 1.5 }}>
+                {lang === 'en' ? 'PHASE' : 'FASE'} {m.fase}
+              </div>
+              <div style={{ fontSize: 22, fontWeight: 700, color: FUSION_PRIMARY, marginTop: 12, letterSpacing: -0.4 }}>
+                {lang === 'en' ? m.nombre_en : m.nombre}
+              </div>
+              <div style={{ fontSize: 14, color: '#2C4A54', opacity: 0.78, lineHeight: 1.55, marginTop: 12 }}>
+                {lang === 'en' ? m.desc_en : m.desc}
+              </div>
+            </div>
+          )}
+        </div>
+        <div style={{ marginTop: 60, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24, paddingTop: 40, borderTop: '1px solid rgba(11,61,79,.15)' }}>
+          {PRINCIPIOS.map((p, i) =>
+          <div key={i}>
+              <div style={{ fontSize: 16, fontWeight: 700, color: FUSION_PRIMARY, letterSpacing: -0.2 }}>
+                {lang === 'en' ? p.t_en : p.t}
+              </div>
+              <div style={{ fontSize: 13, color: '#2C4A54', opacity: 0.75, lineHeight: 1.5, marginTop: 8 }}>
+                {lang === 'en' ? p.d_en : p.d}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>);
+
+}
+
+// ─── CONTACTO ────────────────────────────────────────────────
+function Field({ label, name, type = 'text', textarea }) {
+  const base = { background: 'transparent', border: 'none', borderBottom: '1px solid rgba(232,230,220,.2)',
+    color: '#E8E6DC', fontSize: 14, padding: '10px 0', fontFamily: 'inherit', outline: 'none', width: '100%', resize: 'vertical' };
+  return (
+    <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+      <span style={{ fontSize: 10, letterSpacing: 2, color: 'rgba(232,230,220,.55)', fontFamily: '"IBM Plex Mono", monospace', textTransform: 'uppercase' }}>{label}</span>
+      {textarea ?
+      <textarea name={name} rows={3} required style={base} /> :
+      <input name={name} type={type} required style={base} />}
+    </label>);
+
+}
+
+function Contacto({ lang }) {
+  const t = lang === 'en' ? {
+    eyebrow: 'Get in touch', h: "Let's build the project together",
+    sub: 'Writing a call for proposals, evaluating a territorial instrument, or just exploring options? Send us the brief — we reply within 48 hours.',
+    nameL: 'Name', entityL: 'Entity / organization', emailL: 'Email', msgL: 'Brief description of the need',
+    send: 'Send', sent: "Message received. We'll reply soon.",
+    or: 'Or write directly to', linkedin: 'LinkedIn', pdf: 'Download portfolio (PDF)'
+  } : {
+    eyebrow: 'Contacto', h: 'Construyamos el proyecto juntos',
+    sub: '¿Estás armando una convocatoria, evaluando un instrumento territorial o explorando opciones? Cuéntanos el caso — respondemos en menos de 48 horas.',
+    nameL: 'Nombre', entityL: 'Entidad u organización', emailL: 'Correo', msgL: 'Breve descripción de la necesidad',
+    send: 'Enviar', sent: 'Mensaje recibido. Te contactamos pronto.',
+    or: 'O escríbenos directamente a', linkedin: 'LinkedIn', pdf: 'Descargar portafolio (PDF)'
+  };
+  const [sent, setSent] = React.useState(false);
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    const body = `${t.nameL}: ${data.get('name')}\n${t.entityL}: ${data.get('entity')}\n${t.emailL}: ${data.get('email')}\n\n${data.get('msg')}`;
+    window.location.href = `mailto:ordenamientoots@gmail.com?subject=${encodeURIComponent('Consulta desde el sitio OTS')}&body=${encodeURIComponent(body)}`;
+    setSent(true);
+  };
+  return (
+    <section id="contacto" style={{ background: '#0B242C', color: '#E8E6DC', padding: '110px 40px', fontFamily: '"Archivo", sans-serif' }}>
+      <div style={{ maxWidth: 1000, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 70 }}>
+        <div>
+          <div style={{ fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', color: FUSION_ACCENT,
+            fontFamily: '"IBM Plex Mono", monospace', marginBottom: 18 }}>◦ {t.eyebrow}</div>
+          <h2 style={{ fontSize: 42, fontWeight: 800, letterSpacing: -1.2, margin: 0, lineHeight: 1.1 }}>{t.h}</h2>
+          <p style={{ fontSize: 15, color: 'rgba(232,230,220,.72)', lineHeight: 1.6, marginTop: 22 }}>{t.sub}</p>
+          <div style={{ marginTop: 34, borderTop: '1px solid rgba(232,230,220,.12)', paddingTop: 24 }}>
+            <div style={{ fontSize: 10, letterSpacing: 2, color: 'rgba(232,230,220,.5)', fontFamily: '"IBM Plex Mono", monospace', textTransform: 'uppercase', marginBottom: 10 }}>
+              {t.or}
+            </div>
+            <a href="mailto:ordenamientoots@gmail.com" style={{ fontSize: 18, color: '#E8E6DC', fontWeight: 600, textDecoration: 'none', borderBottom: `1px solid ${FUSION_ACCENT}` }}>
+              ordenamientoots@gmail.com
+            </a>
+            <div style={{ marginTop: 26, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <a href="#" style={{ background: 'rgba(232,230,220,.08)', color: '#E8E6DC', padding: '10px 16px', fontSize: 13, textDecoration: 'none', borderRadius: 2 }}>↗ {t.linkedin}</a>
+              <a href="#" style={{ background: 'rgba(232,230,220,.08)', color: '#E8E6DC', padding: '10px 16px', fontSize: 13, textDecoration: 'none', borderRadius: 2 }}>↓ {t.pdf}</a>
+            </div>
+          </div>
+        </div>
+        <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+          {sent ?
+          <div style={{ padding: 30, background: 'rgba(196,122,61,.15)', border: `1px solid ${FUSION_ACCENT}`, fontSize: 14, color: '#E8E6DC' }}>
+              ✓ {t.sent}
+            </div> :
+
+          <React.Fragment>
+              <Field label={t.nameL} name="name" />
+              <Field label={t.entityL} name="entity" />
+              <Field label={t.emailL} name="email" type="email" />
+              <Field label={t.msgL} name="msg" textarea />
+              <button type="submit" style={{ background: FUSION_ACCENT, color: '#fff', border: 'none',
+              padding: '14px 22px', fontSize: 14, fontWeight: 600, cursor: 'pointer', borderRadius: 2,
+              fontFamily: 'inherit', alignSelf: 'flex-start', marginTop: 4, letterSpacing: 0.3 }}>
+                {t.send} →
+              </button>
+            </React.Fragment>
+          }
+        </form>
+      </div>
+    </section>);
+
+}
+
+// ─── FOOTER ──────────────────────────────────────────────────
+function Footer({ lang }) {
+  const t = lang === 'en' ? { rights: 'All rights reserved' } : { rights: 'Todos los derechos reservados' };
+  return (
+    <footer style={{ background: '#07181F', color: 'rgba(232,230,220,.55)', padding: '32px 40px', fontFamily: '"IBM Plex Mono", monospace', fontSize: 11, letterSpacing: 1 }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+        <div>© 2024–2026 Ordenamiento Territorial Sostenible S.A.S · {t.rights}</div>
+        <div>Bogotá · Colombia</div>
+      </div>
+    </footer>);
+
+}
+
+// ─── APP ─────────────────────────────────────────────────────
+function App() {
+  const [lang, setLang] = React.useState(() => localStorage.getItem('ots-lang') || 'es');
+  React.useEffect(() => {
+    localStorage.setItem('ots-lang', lang);
+    document.documentElement.lang = lang;
+  }, [lang]);
+  return (
+    <React.Fragment>
+      <Header lang={lang} setLang={setLang} />
+      <Hero lang={lang} />
+      <Marquee lang={lang} />
+      <Servicios lang={lang} />
+      <MapaGestiones lang={lang} />
+      <Trayectoria lang={lang} />
+      <Nosotros lang={lang} />
+      <Metodologia lang={lang} />
+      <Contacto lang={lang} />
+      <Footer lang={lang} />
+    </React.Fragment>);
+
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
