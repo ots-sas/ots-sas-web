@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Portafolio Institucional · OTS S.A.S</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --primary: #0B3D4F;
+    --accent: #C47A3D;
+    --bg: #EEE9D8;
+    --dark: #0B242C;
+    --dark2: #14242C;
+    --ink-light: #E8E6DC;
+    --ink-mid: rgba(11,36,44,0.7);
+    --ink-soft: rgba(11,36,44,0.55);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { font-family: "Archivo", sans-serif; color: var(--dark); -webkit-font-smoothing: antialiased; }
+
+  /* SCREEN MODE — stacked pages on tan canvas */
+  body { background: #c4bea8; padding: 40px 20px; }
+  .page {
+    width: 210mm;
+    height: 297mm;
+    margin: 0 auto 24px;
+    background: var(--bg);
+    box-shadow: 0 12px 48px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.12);
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+  }
+  .page:last-child { margin-bottom: 0; }
+
+  /* PRINT MODE */
+  @page { size: A4; margin: 0; }
+  @media print {
+    body { background: white; padding: 0; }
+    .page { margin: 0; box-shadow: none; width: 210mm; height: 297mm; page-break-after: always; }
+    .page:last-child { page-break-after: auto; }
+    .no-print { display: none !important; }
+  }
+
+  /* PRINT BUTTON (only on screen) */
+  .print-btn {
+    position: fixed; top: 20px; right: 20px;
+    background: var(--accent); color: white;
+    padding: 12px 20px; border-radius: 2px;
+    font-family: "IBM Plex Mono", monospace; font-size: 12px;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    text-decoration: none; cursor: pointer; border: none;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    z-index: 100;
+  }
+  .print-btn:hover { background: #b06d34; }
+
+  /* ─── COMMON LAYOUT ─── */
+  .page-inner { padding: 22mm 22mm 18mm; height: 100%; display: flex; flex-direction: column; }
+  .page-inner-tight { padding: 18mm 22mm; height: 100%; display: flex; flex-direction: column; }
+
+  .page-num {
+    position: absolute; bottom: 10mm; left: 22mm;
+    font-family: "IBM Plex Mono", monospace; font-size: 9px;
+    letter-spacing: 1.5px; color: var(--ink-soft);
+  }
+  .page-tag {
+    position: absolute; bottom: 10mm; right: 22mm;
+    font-family: "IBM Plex Mono", monospace; font-size: 9px;
+    letter-spacing: 1.5px; color: var(--ink-soft); text-transform: uppercase;
+  }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace; font-size: 9px;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--accent); font-weight: 500;
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 16px;
+  }
+  .eyebrow::before { content: "◦"; color: var(--accent); }
+
+  h1.display { font-size: 56px; font-weight: 800; line-height: 1.02; letter-spacing: -1.6px; color: var(--primary); }
+  h1.display em { font-style: italic; font-weight: 500; color: var(--accent); }
+  h2.section-title { font-size: 38px; font-weight: 800; line-height: 1.05; letter-spacing: -1px; color: var(--primary); margin-bottom: 8px; }
+  h2.section-title em { font-style: italic; font-weight: 500; color: var(--accent); }
+  h3.sub { font-size: 16px; font-weight: 600; color: var(--primary); letter-spacing: -0.2px; }
+  p.lead { font-size: 14px; line-height: 1.6; color: var(--ink-mid); }
+  p.body { font-size: 11.5px; line-height: 1.65; color: var(--ink-mid); }
+  p.body strong { color: var(--primary); font-weight: 600; }
+
+  /* ─── BRAND MARK ─── */
+  .mark-svg { flex-shrink: 0; }
+
+  /* ─── COVER (page 1) ─── */
+  .cover { background: var(--dark); color: var(--ink-light); }
+  .cover .page-inner { padding: 22mm; }
+  .cover-bg {
+    position: absolute; inset: 0; opacity: 0.10; pointer-events: none;
+  }
+  .cover-content { position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; }
+  .cover-header { display: flex; justify-content: space-between; align-items: flex-start; }
+  .cover-meta-line { font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(232,230,220,0.55); }
+  .cover-title { margin-top: auto; }
+  .cover-title .doc-type { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 24px; }
+  .cover-title h1 { font-size: 64px; font-weight: 800; line-height: 1.0; letter-spacing: -2px; color: var(--ink-light); }
+  .cover-title h1 em { font-style: italic; font-weight: 500; color: var(--accent); }
+  .cover-footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid rgba(232,230,220,0.18); display: flex; justify-content: space-between; font-family: "IBM Plex Mono", monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(232,230,220,0.5); }
+
+  /* ─── INDEX (page 2) ─── */
+  .index-list { margin-top: 32px; }
+  .index-row {
+    display: grid; grid-template-columns: 36px 1fr auto;
+    gap: 20px; align-items: baseline;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(11,36,44,0.12);
+    font-size: 14px;
+  }
+  .index-row .num {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px;
+    color: var(--accent); letter-spacing: 1px;
+  }
+  .index-row .title { color: var(--primary); font-weight: 500; }
+  .index-row .pg { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-soft); }
+
+  /* ─── INSTITUCIONAL DATA ─── */
+  .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 36px; border-top: 1px solid rgba(11,36,44,0.15); }
+  .data-cell {
+    padding: 18px 22px 18px 0;
+    border-bottom: 1px solid rgba(11,36,44,0.10);
+    border-right: 1px solid rgba(11,36,44,0.10);
+  }
+  .data-cell:nth-child(2n) { border-right: none; padding-right: 0; padding-left: 22px; }
+  .data-cell .label {
+    font-family: "IBM Plex Mono", monospace; font-size: 9px;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--ink-soft); margin-bottom: 6px;
+  }
+  .data-cell .val { font-size: 14px; color: var(--primary); font-weight: 500; }
+  .data-cell .val small { display: block; font-size: 11px; color: var(--ink-mid); font-weight: 400; margin-top: 2px; }
+
+  /* ─── AUDIENCIAS ─── */
+  .audience-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 28px; }
+  .audience-card {
+    background: white; border-left: 3px solid var(--accent);
+    padding: 22px 22px 20px;
+    position: relative;
+  }
+  .audience-card .num {
+    position: absolute; top: 16px; right: 18px;
+    font-family: "IBM Plex Mono", monospace; font-size: 10px;
+    color: var(--ink-soft); letter-spacing: 1px;
+  }
+  .audience-card h3 {
+    font-size: 17px; font-weight: 700; color: var(--primary);
+    line-height: 1.15; margin-bottom: 8px; padding-right: 30px;
+  }
+  .audience-card .desc { font-size: 11px; line-height: 1.55; color: var(--ink-mid); margin-bottom: 12px; }
+  .audience-card .examples {
+    font-family: "IBM Plex Mono", monospace; font-size: 9px;
+    color: var(--ink-soft); letter-spacing: 0.5px;
+    padding-top: 10px; border-top: 1px solid rgba(11,36,44,0.08);
+  }
+
+  /* ─── SERVICIOS OVERVIEW ─── */
+  .services-list { margin-top: 32px; display: flex; flex-direction: column; gap: 0; }
+  .service-row {
+    display: grid; grid-template-columns: 50px 1fr;
+    gap: 20px; align-items: baseline;
+    padding: 16px 0;
+    border-top: 1px solid rgba(11,36,44,0.12);
+  }
+  .service-row:last-child { border-bottom: 1px solid rgba(11,36,44,0.12); }
+  .service-row .num {
+    font-family: "IBM Plex Mono", monospace; font-size: 12px;
+    color: var(--accent); letter-spacing: 1px; font-weight: 500;
+  }
+  .service-row .titulo { font-size: 17px; font-weight: 600; color: var(--primary); margin-bottom: 4px; line-height: 1.2; }
+  .service-row .desc { font-size: 11.5px; line-height: 1.55; color: var(--ink-mid); }
+
+  /* ─── SERVICIOS DETAIL ─── */
+  .service-detail {
+    background: white; padding: 18px 20px; margin-bottom: 12px;
+    position: relative;
+    border-top: 2px solid var(--accent);
+  }
+  .service-detail .head { display: flex; gap: 14px; align-items: baseline; margin-bottom: 6px; }
+  .service-detail .head .n { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--accent); letter-spacing: 1px; }
+  .service-detail .head h3 { font-size: 16px; font-weight: 700; color: var(--primary); line-height: 1.15; }
+  .service-detail .desc { font-size: 11px; line-height: 1.55; color: var(--ink-mid); margin-top: 6px; }
+  .service-detail .tags { margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(11,36,44,0.08); display: flex; flex-wrap: wrap; gap: 6px; }
+  .service-detail .tag { font-family: "IBM Plex Mono", monospace; font-size: 8.5px; color: var(--primary); letter-spacing: 0.5px; padding: 3px 8px; background: rgba(11,61,79,0.06); border-radius: 1px; }
+
+  /* ─── METODOLOGÍA ─── */
+  .metodologia-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 28px; }
+  .meto-card {
+    background: var(--dark); color: var(--ink-light);
+    padding: 22px 22px 24px;
+    position: relative;
+  }
+  .meto-card .fase { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--accent); letter-spacing: 1.5px; margin-bottom: 14px; }
+  .meto-card h3 { font-size: 22px; font-weight: 700; color: var(--ink-light); margin-bottom: 10px; line-height: 1.1; }
+  .meto-card .desc { font-size: 11px; line-height: 1.55; color: rgba(232,230,220,0.75); }
+  .meto-card .deliverables { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(232,230,220,0.18); }
+  .meto-card .deliverables-label { font-family: "IBM Plex Mono", monospace; font-size: 8.5px; letter-spacing: 1.5px; color: rgba(232,230,220,0.55); margin-bottom: 8px; text-transform: uppercase; }
+  .meto-card .deliverables ul { list-style: none; padding: 0; margin: 0; }
+  .meto-card .deliverables li {
+    font-size: 10.5px; color: rgba(232,230,220,0.85);
+    padding: 3px 0 3px 14px; position: relative;
+  }
+  .meto-card .deliverables li::before {
+    content: "→"; position: absolute; left: 0; color: var(--accent);
+  }
+
+  /* ─── TRAYECTORIA ─── */
+  .timeline { margin-top: 28px; position: relative; padding-left: 32px; }
+  .timeline::before {
+    content: ""; position: absolute; left: 11px; top: 8px; bottom: 8px;
+    width: 1px; background: rgba(11,36,44,0.18);
+  }
+  .timeline-item { position: relative; padding-bottom: 18px; }
+  .timeline-item::before {
+    content: ""; position: absolute; left: -27px; top: 5px;
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--bg); border: 2px solid var(--accent);
+  }
+  .timeline-item.hito::before { background: var(--accent); }
+  .timeline-item.presente::before { background: var(--primary); border-color: var(--primary); box-shadow: 0 0 0 4px rgba(11,61,79,0.15); }
+  .timeline-item .fecha { font-family: "IBM Plex Mono", monospace; font-size: 9.5px; color: var(--ink-soft); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
+  .timeline-item h4 { font-size: 14px; font-weight: 600; color: var(--primary); line-height: 1.25; margin-bottom: 4px; }
+  .timeline-item .desc { font-size: 11px; line-height: 1.55; color: var(--ink-mid); }
+
+  /* ─── PRINCIPIOS / CAPACIDADES ─── */
+  .principles-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 28px; }
+  .principle {
+    border-top: 1px solid var(--accent);
+    padding: 16px 0 4px;
+  }
+  .principle .num { font-family: "IBM Plex Mono", monospace; font-size: 10px; color: var(--accent); letter-spacing: 1.5px; margin-bottom: 8px; }
+  .principle h3 { font-size: 17px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+  .principle .desc { font-size: 11px; line-height: 1.55; color: var(--ink-mid); }
+
+  /* ─── TERRITORIOS ─── */
+  .territorios-section { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 28px; }
+  .terr-block h3 { font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid rgba(11,36,44,0.15); display: flex; align-items: center; gap: 8px; }
+  .terr-block .dept-tag { font-family: "IBM Plex Mono", monospace; font-size: 9px; color: var(--accent); letter-spacing: 1px; padding: 2px 6px; background: rgba(196,122,61,0.10); border-radius: 1px; }
+  .terr-block ul { list-style: none; padding: 0; }
+  .terr-block li { font-size: 11.5px; color: var(--ink-mid); padding: 4px 0 4px 14px; position: relative; }
+  .terr-block li::before { content: "·"; position: absolute; left: 4px; color: var(--accent); font-weight: bold; }
+
+  /* ─── COVER FOOTER ─── */
+  .closing-page { background: var(--dark); color: var(--ink-light); }
+  .closing-page .closing-inner { padding: 22mm; height: 100%; display: flex; flex-direction: column; position: relative; z-index: 1; }
+  .closing-msg { margin-top: auto; }
+  .closing-msg .mono { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 24px; }
+  .closing-msg h2 { font-size: 50px; font-weight: 800; line-height: 1.05; letter-spacing: -1.4px; color: var(--ink-light); margin-bottom: 28px; }
+  .closing-msg h2 em { font-style: italic; font-weight: 500; color: var(--accent); }
+  .closing-msg .sub { font-size: 15px; line-height: 1.6; color: rgba(232,230,220,0.75); max-width: 480px; }
+  .contact-block { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 28px; margin-top: 50px; padding-top: 28px; border-top: 1px solid rgba(232,230,220,0.18); }
+  .contact-block .label { font-family: "IBM Plex Mono", monospace; font-size: 9px; letter-spacing: 1.5px; color: rgba(232,230,220,0.5); text-transform: uppercase; margin-bottom: 6px; }
+  .contact-block .val { font-size: 13px; color: var(--ink-light); font-weight: 500; }
+  .closing-foot { margin-top: 32px; padding-top: 16px; border-top: 1px solid rgba(232,230,220,0.10); display: flex; justify-content: space-between; font-family: "IBM Plex Mono", monospace; font-size: 9px; letter-spacing: 1.5px; color: rgba(232,230,220,0.4); text-transform: uppercase; }
+
+  /* ─── BG TOPO LINES ─── */
+  .topo-bg {
+    position: absolute; inset: 0; pointer-events: none; opacity: 0.05;
+  }
+
+  /* ─── COVER LOGO LARGE ─── */
+  .cover-mark { position: absolute; top: 22mm; right: 22mm; opacity: 0.20; }
+
+  /* ─── FUNDADOR CARD ─── */
+  .fundador-card {
+    margin-top: 32px;
+    background: white;
+    padding: 28px 30px;
+    display: grid; grid-template-columns: 90px 1fr; gap: 24px; align-items: start;
+    border-left: 4px solid var(--accent);
+  }
+  .fundador-photo {
+    width: 90px; height: 90px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--dark2));
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent); font-family: "IBM Plex Mono", monospace; font-size: 28px; font-weight: 600;
+  }
+  .fundador-card h3 { font-size: 19px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+  .fundador-card .role { font-family: "IBM Plex Mono", monospace; font-size: 10px; color: var(--accent); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; }
+  .fundador-card .bio { font-size: 11.5px; line-height: 1.6; color: var(--ink-mid); }
+  .fundador-card .creds { margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(11,36,44,0.10); display: flex; flex-wrap: wrap; gap: 6px; }
+  .fundador-card .cred-tag { font-family: "IBM Plex Mono", monospace; font-size: 9px; color: var(--primary); letter-spacing: 0.5px; padding: 3px 8px; background: rgba(11,61,79,0.06); border-radius: 1px; }
+
+  /* CTA print */
+  .help-banner {
+    position: fixed; bottom: 20px; right: 20px;
+    background: white; padding: 14px 18px;
+    border-radius: 4px; box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    font-size: 12px; color: var(--ink-mid); font-family: "Archivo", sans-serif;
+    max-width: 280px; line-height: 1.4;
+  }
+  .help-banner strong { color: var(--primary); }
+  .help-banner kbd {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px;
+    background: var(--bg); padding: 2px 6px; border-radius: 2px;
+    border: 1px solid rgba(11,36,44,0.15); color: var(--primary);
+  }
+</style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">↓ Descargar PDF</button>
+
+<div class="help-banner no-print">
+  <strong>Para guardar como PDF:</strong> presiona <kbd>Cmd</kbd>+<kbd>P</kbd> (Mac) o <kbd>Ctrl</kbd>+<kbd>P</kbd> (Windows) y elige "Guardar como PDF".
+</div>
+
+<!-- ════════════ PAGE 1 — COVER ════════════ -->
+<section class="page cover">
+  <svg class="cover-bg" viewBox="0 0 1200 1700" preserveAspectRatio="xMidYMid slice">
+    <g stroke="#E8E6DC" stroke-width="0.7" fill="none">
+      <path d="M -100 800 Q 200 600, 600 700 Q 1000 800, 1400 650" />
+      <path d="M -100 900 Q 200 720, 600 820 Q 1000 920, 1400 780" />
+      <path d="M -100 1000 Q 200 840, 600 940 Q 1000 1040, 1400 900" />
+      <path d="M -100 1100 Q 200 960, 600 1060 Q 1000 1160, 1400 1020" />
+      <path d="M -100 1200 Q 200 1080, 600 1180 Q 1000 1280, 1400 1140" />
+      <path d="M -100 700 Q 200 500, 600 600 Q 1000 700, 1400 550" />
+      <path d="M -100 600 Q 200 400, 600 500 Q 1000 600, 1400 450" />
+    </g>
+  </svg>
+
+  <svg class="cover-mark" width="160" height="160" viewBox="0 0 100 100" fill="none">
+    <g stroke="#E8E6DC" stroke-width="1" opacity="0.4">
+      <path d="M 50 8 L 50 14" /><path d="M 50 86 L 50 92" />
+      <path d="M 8 50 L 14 50" /><path d="M 86 50 L 92 50" />
+    </g>
+    <g stroke="#E8E6DC" stroke-width="1.4" fill="none" stroke-linecap="round">
+      <path d="M 18 52 Q 20 28, 48 26 Q 78 26, 82 50 Q 80 72, 52 74 Q 22 74, 18 52 Z" opacity="0.40" />
+      <path d="M 24 52 Q 26 34, 49 32 Q 74 32, 77 50 Q 75 68, 52 70 Q 28 70, 24 52 Z" opacity="0.55" />
+      <path d="M 30 52 Q 32 40, 50 38 Q 69 38, 71 50 Q 70 64, 52 66 Q 34 66, 30 52 Z" opacity="0.75" />
+      <path d="M 36 52 Q 38 45, 50 44 Q 63 44, 65 51 Q 64 60, 52 61 Q 40 61, 36 52 Z" opacity="1" />
+    </g>
+    <circle cx="50" cy="52" r="5" fill="#E8E6DC" />
+    <circle cx="50" cy="52" r="2" fill="#C47A3D" />
+  </svg>
+
+  <div class="cover-content page-inner">
+    <div class="cover-header">
+      <div>
+        <div style="font-size: 26px; font-weight: 800; color: var(--ink-light); letter-spacing: -0.8px;">OTS<span style="color: var(--accent);">.</span></div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; letter-spacing: 2px; color: rgba(232,230,220,0.55); text-transform: uppercase; margin-top: 4px;">Ordenamiento Territorial Sostenible</div>
+      </div>
+      <div style="text-align: right;">
+        <div class="cover-meta-line">Documento institucional</div>
+        <div class="cover-meta-line" style="margin-top: 4px;">2026 · ed. 01</div>
+      </div>
+    </div>
+
+    <div class="cover-title">
+      <div class="doc-type">◦ Portafolio Institucional</div>
+      <h1>Consultoría<br />ambiental y de<br /><em>ordenamiento territorial</em></h1>
+    </div>
+
+    <div class="cover-footer">
+      <div>OTS S.A.S · NIT 901.815.692-3</div>
+      <div>Bogotá D.C. · Colombia</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ PAGE 2 — ÍNDICE ════════════ -->
+<section class="page">
+  <div class="page-inner">
+    <div class="eyebrow">Contenido</div>
+    <h2 class="section-title">Índice</h2>
+    <p class="lead" style="max-width: 460px; margin-top: 12px;">Lo que encontrará en este documento — capacidades, servicios, metodología y trayectoria de OTS S.A.S.</p>
+
+    <div class="index-list">
+      <div class="index-row"><span class="num">01</span><span class="title">Carta de presentación</span><span class="pg">03</span></div>
+      <div class="index-row"><span class="num">02</span><span class="title">Identidad institucional</span><span class="pg">04</span></div>
+      <div class="index-row"><span class="num">03</span><span class="title">Para quién trabajamos</span><span class="pg">05</span></div>
+      <div class="index-row"><span class="num">04</span><span class="title">Servicios — visión general</span><span class="pg">06</span></div>
+      <div class="index-row"><span class="num">05</span><span class="title">Servicios — detalle (i)</span><span class="pg">07</span></div>
+      <div class="index-row"><span class="num">06</span><span class="title">Servicios — detalle (ii)</span><span class="pg">08</span></div>
+      <div class="index-row"><span class="num">07</span><span class="title">Metodología en cuatro fases</span><span class="pg">09</span></div>
+      <div class="index-row"><span class="num">08</span><span class="title">Trayectoria y pipeline activo</span><span class="pg">10</span></div>
+      <div class="index-row"><span class="num">09</span><span class="title">Territorios donde trabajamos</span><span class="pg">11</span></div>
+      <div class="index-row"><span class="num">10</span><span class="title">Principios y compromisos</span><span class="pg">12</span></div>
+      <div class="index-row"><span class="num">11</span><span class="title">Contacto</span><span class="pg">13</span></div>
+    </div>
+  </div>
+  <div class="page-num">02</div>
+  <div class="page-tag">Índice</div>
+</section>
+
+<!-- ════════════ PAGE 3 — CARTA / QUIÉNES SOMOS ════════════ -->
+<section class="page">
+  <div class="page-inner">
+    <div class="eyebrow">01 · Quiénes somos</div>
+    <h2 class="section-title">Una firma joven con<br /><em>experiencia consolidada</em>.</h2>
+    <p class="lead" style="margin-top: 22px; max-width: 580px;">Ordenamiento Territorial Sostenible S.A.S es una firma colombiana de consultoría especializada en planificación territorial, evaluación ambiental y formulación de proyectos de inversión pública.</p>
+
+    <p class="body" style="margin-top: 18px; max-width: 580px;">Constituida formalmente en marzo de 2024, OTS reúne más de quince años de experiencia profesional acumulada por sus socios en la elaboración de Planes de Ordenamiento Territorial, Estudios de Impacto Ambiental, Planes de Gestión del Riesgo y proyectos de inversión radicados ante el Sistema General de Regalías, el DNP y entes territoriales.</p>
+
+    <p class="body" style="margin-top: 14px; max-width: 580px;">Trabajamos con <strong>alcaldías y gobernaciones</strong>, <strong>ministerios y entidades del orden nacional</strong>, <strong>cooperación internacional</strong> y <strong>sector privado</strong>, integrando las determinantes ambientales y la gestión del riesgo como punto de partida — no como capítulo final.</p>
+
+    <div class="fundador-card">
+      <div class="fundador-photo">OT</div>
+      <div>
+        <h3>Equipo fundador</h3>
+        <div class="role">Socio principal · Consultor senior</div>
+        <p class="bio">Profesional con formación en planificación territorial y ambiental, experiencia directa en formulación de POT, EIA y proyectos MGA, y vínculo permanente con entes territoriales en Tolima, Huila, Caquetá y otras regiones donde la firma ha radicado propuestas técnicas durante 2024 y 2025.</p>
+        <div class="creds">
+          <span class="cred-tag">MGA · DNP</span>
+          <span class="cred-tag">POT · MinVivienda</span>
+          <span class="cred-tag">EIA · ANLA</span>
+          <span class="cred-tag">PMGRD · UNGRD</span>
+          <span class="cred-tag">SGR</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">03</div>
+  <div class="page-tag">01 · Quiénes somos</div>
+</section>
+
+<!-- ════════════ PAGE 4 — IDENTIDAD ════════════ -->
+<section class="page">
+  <div class="page-inner">
+    <div class="eyebrow">02 · Identidad institucional</div>
+    <h2 class="section-title">Datos<br /><em>institucionales</em>.</h2>
+    <p class="lead" style="margin-top: 18px; max-width: 540px;">Información de constitución, contacto y canales oficiales de OTS S.A.S.</p>
+
+    <div class="data-grid">
+      <div class="data-cell">
+        <div class="label">Razón social</div>
+        <div class="val">Ordenamiento Territorial Sostenible S.A.S<small>Sociedad por Acciones Simplificada</small></div>
+      </div>
+      <div class="data-cell">
+        <div class="label">NIT</div>
+        <div class="val">901.815.692-3</div>
+      </div>
+      <div class="data-cell">
+        <div class="label">Constitución</div>
+        <div class="val">Marzo de 2024<small>Cámara de Comercio de Bogotá</small></div>
+      </div>
+      <div class="data-cell">
+        <div class="label">Domicilio principal</div>
+        <div class="val">Bogotá D.C.<small>Colombia</small></div>
+      </div>
+      <div class="data-cell">
+        <div class="label">Objeto social</div>
+        <div class="val">Consultoría ambiental, ordenamiento territorial y formulación de proyectos<small>Servicios profesionales especializados</small></div>
+      </div>
+      <div class="data-cell">
+        <div class="label">Régimen</div>
+        <div class="val">Tributario ordinario<small>Persona jurídica · Responsable de IVA</small></div>
+      </div>
+      <div class="data-cell">
+        <div class="label">Correo institucional</div>
+        <div class="val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e68994828388878b8f83889289899295a6818b878f8ac885898b">[email&#160;protected]</a></div>
+      </div>
+      <div class="data-cell">
+        <div class="label">Sitio web · LinkedIn</div>
+        <div class="val">ots-sas.netlify.app<small>linkedin.com/company/100469055</small></div>
+      </div>
+    </div>
+
+    <div style="margin-top: auto; padding-top: 24px; display: flex; justify-content: space-between; align-items: flex-end;">
+      <p class="body" style="max-width: 380px;"><strong>Documentación disponible bajo solicitud:</strong> RUT, certificado de existencia y representación legal, estados financieros, hojas de vida del equipo, certificaciones de experiencia.</p>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--ink-soft); letter-spacing: 1.5px; text-transform: uppercase; text-align: right;">Vigencia: 2026<br />v. 01 · ED. ESPAÑOL</div>
+    </div>
+  </div>
+  <div class="page-num">04</div>
+  <div class="page-tag">02 · Identidad</div>
+</section>
+
+<!-- ════════════ PAGE 5 — AUDIENCIAS ════════════ -->
+<section class="page">
+  <div class="page-inner">
+    <div class="eyebrow">03 · Para quién trabajamos</div>
+    <h2 class="section-title">Cuatro tipos de<br /><em>cliente y aliado</em>.</h2>
+    <p class="lead" style="margin-top: 18px; max-width: 580px;">Adaptamos enfoque, productos y formatos contractuales según el tipo de contraparte. Estos son los cuatro grupos con los que OTS está preparada para articular trabajo formal.</p>
+
+    <div class="audience-grid">
+      <div class="audience-card">
+        <div class="num">01</div>
+        <h3>Alcaldías y Gobernaciones</h3>
+        <p class="desc">Acompañamiento técnico en formulación y ajuste de POT, PBOT, EOT, planes de desarrollo, PMGRD y proyectos de inversión radicados en bancos territoriales.</p>
+        <div class="examples">Tolima · Huila · Caquetá · Cundinamarca</div>
+      </div>
+      <div class="audience-card">
+        <div class="num">02</div>
+        <h3>Ministerios y entidades nacionales</h3>
+        <p class="desc">Consultoría especializada para MinAmbiente, MinVivienda, DNP, ANLA, UNGRD, IDEAM y entidades adscritas en convocatorias y procesos contractuales formales.</p>
+        <div class="examples">Macroproyectos MinAmbiente · SGR · Banco DNP</div>
+      </div>
+      <div class="audience-card">
+        <div class="num">03</div>
+        <h3>Cooperación internacional</h3>
+        <p class="desc">Estructuración técnica de iniciativas con énfasis en sostenibilidad, gestión del riesgo, gobernanza territorial y consulta previa con comunidades étnicas.</p>
+        <div class="examples">BID · GIZ · World Bank · USAID · AECID</div>
+      </div>
+      <div class="audience-card">
+        <div class="num">04</div>
+        <h3>Sector privado</h3>
+        <p class="desc">Estudios de Impacto Ambiental, Planes de Manejo, debida diligencia ambiental y acompañamiento ante autoridad ambiental para empresas con proyectos sujetos a licenciamiento.</p>
+        <div class="examples">Infraestructura · Energía · Agroindustria</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">05</div>
+  <div class="page-tag">03 · Audiencias</div>
+</section>
+
+<!-- ════════════ PAGE 6 — SERVICIOS OVERVIEW ════════════ -->
+<section class="page">
+  <div class="page-inner">
+    <div class="eyebrow">04 · Servicios</div>
+    <h2 class="section-title">Siete líneas de<br /><em>servicio integradas</em>.</h2>
+    <p class="lead" style="margin-top: 18px; max-width: 580px;">Cada línea opera de forma independiente o articulada con las demás. La integración entre planificación, evaluación ambiental y gestión del riesgo es uno de nuestros diferenciadores.</p>
+
+    <div class="services-list">
+      <div class="service-row">
+        <span class="num">01</span>
+        <div><div class="titulo">Formulación de proyectos de inversión</div><div class="desc">Estructuración metodológica MGA y radicación en Banco de Proyectos del SGR, DNP y entes territoriales.</div></div>
+      </div>
+      <div class="service-row">
+        <span class="num">02</span>
+        <div><div class="titulo">Planes de Ordenamiento Territorial</div><div class="desc">Formulación, revisión general y ajustes excepcionales de POT, PBOT y EOT con enfoque de determinantes ambientales y gestión del riesgo.</div></div>
+      </div>
+      <div class="service-row">
+        <span class="num">03</span>
+        <div><div class="titulo">Evaluación ambiental</div><div class="desc">Estudios de Impacto Ambiental (EIA), Planes de Manejo (PMA) y acompañamiento en procesos de licenciamiento ante ANLA y CARs.</div></div>
+      </div>
+      <div class="service-row">
+        <span class="num">04</span>
+        <div><div class="titulo">Planes de gestión del riesgo</div><div class="desc">Formulación de PMGRD municipales y departamentales con análisis de amenaza, vulnerabilidad y medidas de reducción.</div></div>
+      </div>
+      <div class="service-row">
+        <span class="num">05</span>
+        <div><div class="titulo">Participación ciudadana</div><div class="desc">Diseño e implementación de procesos participativos, mesas de trabajo y consulta previa con comunidades étnicas.</div></div>
+      </div>
+      <div class="service-row">
+        <span class="num">06</span>
+        <div><div class="titulo">Planes de desarrollo municipales</div><div class="desc">Formulación, armonización y seguimiento de PDM alineados con Plan Nacional de Desarrollo, ODS y POT vigente.</div></div>
+      </div>
+      <div class="service-row">
+        <span class="num">07</span>
+        <div><div class="titulo">Asesoría a entes territoriales</div><div class="desc">Acompañamiento técnico continuo a alcaldías y gobernaciones en diagnóstico, priorización y gestión de recursos.</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">06</div>
+  <div class="page-tag">04 · Servicios</div>
+</section>
+
+<!-- ════════════ PAGE 7 — SERVICIOS DETALLE I ════════════ -->
+<section class="page">
+  <div class="page-inner">
+    <div class="eyebrow">05 · Servicios — detalle (i)</div>
+    <h2 class="section-title">Servicios técnicos<br /><em>en profundidad</em>.</h2>
+
+    <div style="margin-top: 24px;">
+      <div class="service-detail">
+        <div class="head"><span class="n">01</span><h3>Formulación de proyectos de inversión</h3></div>
+        <p class="desc">Aplicamos la Metodología General Ajustada (MGA) en cada etapa del ciclo: identificación, preparación, evaluación y programación. Radicamos directamente en bancos de proyectos del SGR, DNP, y entes territoriales con seguimiento hasta viabilización.</p>
+        <div class="tags">
+          <span class="tag">MGA WEB</span><span class="tag">SGR</span><span class="tag">SUIFP</span><span class="tag">Cadenas de valor</span><span class="tag">Marco lógico</span>
+        </div>
+      </div>
+      <div class="service-detail">
+        <div class="head"><span class="n">02</span><h3>Planes de Ordenamiento Territorial</h3></div>
+        <p class="desc">Acompañamos a municipios en la formulación, revisión general y ajustes excepcionales de sus instrumentos de planificación territorial, integrando determinantes ambientales, gestión del riesgo y enfoque diferencial étnico-territorial.</p>
+        <div class="tags">
+          <span class="tag">POT · PBOT · EOT</span><span class="tag">Determinantes ambientales</span><span class="tag">Cartografía oficial</span><span class="tag">Concertación CAR</span>
+        </div>
+      </div>
+      <div class="service-detail">
+        <div class="head"><span class="n">03</span><h3>Evaluación ambiental</h3></div>
+        <p class="desc">EIA, PMA, DAA y acompañamiento técnico en trámites de licenciamiento, modificación y seguimiento ante ANLA y Corporaciones Autónomas Regionales. Productos verificables y trazables conforme a términos de referencia oficiales.</p>
+        <div class="tags">
+          <span class="tag">EIA</span><span class="tag">PMA</span><span class="tag">DAA</span><span class="tag">ANLA</span><span class="tag">CARs</span><span class="tag">VITAL</span>
+        </div>
+      </div>
+      <div class="service-detail">
+        <div class="head"><span class="n">04</span><h3>Planes de gestión del riesgo</h3></div>
+        <p class="desc">Análisis de amenazas hidrometeorológicas, geotécnicas y antrópicas. Caracterización de vulnerabilidad y diseño de estrategias de conocimiento, reducción y manejo del desastre conforme a la Ley 1523 de 2012.</p>
+        <div class="tags">
+          <span class="tag">PMGRD</span><span class="tag">EMRE</span><span class="tag">Ley 1523</span><span class="tag">UNGRD</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">07</div>
+  <div class="page-tag">05 · Servicios (i)</div>
+</section>
+
+<!-- ════════════ PAGE 8 — SERVICIOS DETALLE II ════════════ -->
+<section class="page">
+  <div class="page-inner">
+    <div class="eyebrow">06 · Servicios — detalle (ii)</div>
+    <h2 class="section-title">Procesos sociales<br /><em>e institucionales</em>.</h2>
+
+    <div style="margin-top: 24px;">
+      <div class="service-detail">
+        <div class="head"><span class="n">05</span><h3>Participación ciudadana</h3></div>
+        <p class="desc">Diseño metodológico, facilitación de mesas, talleres territoriales y procesos de consulta previa con comunidades indígenas, afrodescendientes y campesinas. Documentación con valor jurídico y registro audiovisual.</p>
+        <div class="tags">
+          <span class="tag">Consulta previa</span><span class="tag">Mesas territoriales</span><span class="tag">Cartografía social</span><span class="tag">MinInterior</span>
+        </div>
+      </div>
+      <div class="service-detail">
+        <div class="head"><span class="n">06</span><h3>Planes de desarrollo municipales</h3></div>
+        <p class="desc">Formulación de PDM en armonía con el Plan Nacional de Desarrollo, ODS, Plan Departamental y POT vigente. Tablero de indicadores y seguimiento al plan plurianual de inversiones.</p>
+        <div class="tags">
+          <span class="tag">PDM</span><span class="tag">PND</span><span class="tag">ODS</span><span class="tag">Indicadores</span><span class="tag">Plan plurianual</span>
+        </div>
+      </div>
+      <div class="service-detail">
+        <div class="head"><span class="n">07</span><h3>Asesoría a entes territoriales</h3></div>
+        <p class="desc">Asesoría continua a despachos, secretarías y oficinas de planeación. Estructuración de portafolios, búsqueda de cofinanciación y articulación con cooperación internacional. Modelo de retainer mensual o por proyecto.</p>
+        <div class="tags">
+          <span class="tag">Acompañamiento técnico</span><span class="tag">Estructuración financiera</span><span class="tag">Cofinanciación</span><span class="tag">Retainer</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: auto; padding-top: 24px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px;">
+      <div style="border-top: 1px solid var(--accent); padding-top: 12px;">
+        <div style="font-size: 32px; font-weight: 800; color: var(--primary); line-height: 1;">7</div>
+        <div style="font-size: 11px; color: var(--ink-mid); margin-top: 4px;">líneas de servicio integradas</div>
+      </div>
+      <div style="border-top: 1px solid var(--accent); padding-top: 12px;">
+        <div style="font-size: 32px; font-weight: 800; color: var(--primary); line-height: 1;">15+</div>
+        <div style="font-size: 11px; color: var(--ink-mid); margin-top: 4px;">años de experiencia profesional acumulada</div>
+      </div>
+      <div style="border-top: 1px solid var(--accent); padding-top: 12px;">
+        <div style="font-size: 32px; font-weight: 800; color: var(--primary); line-height: 1;">4</div>
+        <div style="font-size: 11px; color: var(--ink-mid); margin-top: 4px;">tipos de contraparte atendidos</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">08</div>
+  <div class="page-tag">06 · Servicios (ii)</div>
+</section>
+
+<!-- ════════════ PAGE 9 — METODOLOGÍA ════════════ -->
+<section class="page">
+  <div class="page-inner">
+    <div class="eyebrow">07 · Cómo trabajamos</div>
+    <h2 class="section-title">Metodología en<br /><em>cuatro fases</em>.</h2>
+    <p class="lead" style="margin-top: 18px; max-width: 580px;">Independientemente del servicio contratado, todos nuestros procesos siguen este ciclo. Cada fase tiene productos verificables y compromisos de plazo acordados con la contraparte.</p>
+
+    <div class="metodologia-grid">
+      <div class="meto-card">
+        <div class="fase">Fase 01</div>
+        <h3>Diagnóstico</h3>
+        <p class="desc">Caracterización biofísica, socioeconómica e institucional del territorio. Análisis de instrumentos vigentes y línea base.</p>
+        <div class="deliverables">
+          <div class="deliverables-label">Productos típicos</div>
+          <ul>
+            <li>Documento de caracterización</li>
+            <li>Cartografía oficial actualizada</li>
+            <li>Análisis de instrumentos vigentes</li>
+            <li>Línea base de indicadores</li>
+          </ul>
+        </div>
+      </div>
+      <div class="meto-card">
+        <div class="fase">Fase 02</div>
+        <h3>Formulación</h3>
+        <p class="desc">Construcción participativa de objetivos, estrategias, programas y proyectos con enfoque diferencial.</p>
+        <div class="deliverables">
+          <div class="deliverables-label">Productos típicos</div>
+          <ul>
+            <li>Documento de formulación</li>
+            <li>Marco lógico y árbol de problemas</li>
+            <li>Programa de ejecución</li>
+            <li>Memorias de mesas participativas</li>
+          </ul>
+        </div>
+      </div>
+      <div class="meto-card">
+        <div class="fase">Fase 03</div>
+        <h3>Estructuración</h3>
+        <p class="desc">Diseño técnico, financiero y jurídico. Radicación en bancos de proyectos y gestión de recursos.</p>
+        <div class="deliverables">
+          <div class="deliverables-label">Productos típicos</div>
+          <ul>
+            <li>Ficha MGA radicada</li>
+            <li>Anexos técnicos y planos</li>
+            <li>Análisis de fuentes de financiación</li>
+            <li>Concepto de viabilidad</li>
+          </ul>
+        </div>
+      </div>
+      <div class="meto-card">
+        <div class="fase">Fase 04</div>
+        <h3>Ejecución y evaluación</h3>
+        <p class="desc">Acompañamiento en la implementación, seguimiento a indicadores y evaluación ex-post de resultados.</p>
+        <div class="deliverables">
+          <div class="deliverables-label">Productos típicos</div>
+          <ul>
+            <li>Plan de seguimiento</li>
+            <li>Tablero de indicadores</li>
+            <li>Informes periódicos</li>
+            <li>Evaluación ex-post</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">09</div>
+  <div class="page-tag">07 · Metodología</div>
+</section>
+
+<!-- ════════════ PAGE 10 — TRAYECTORIA ════════════ -->
+<section class="page">
+  <div class="page-inner">
+    <div class="eyebrow">08 · Trayectoria</div>
+    <h2 class="section-title">Hitos y<br /><em>pipeline activo</em>.</h2>
+    <p class="lead" style="margin-top: 18px; max-width: 580px;">Cronología institucional desde nuestra constitución. Varias propuestas en evaluación; abiertos a nuevas convocatorias y alianzas.</p>
+
+    <div class="timeline">
+      <div class="timeline-item hito">
+        <div class="fecha">Marzo 2024</div>
+        <h4>Constitución de OTS S.A.S</h4>
+        <p class="desc">La firma se constituye formalmente con foco en consultoría ambiental y ordenamiento territorial. Inscripción ante Cámara de Comercio de Bogotá y obtención de RUT.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="fecha">2024 · Q2–Q3</div>
+        <h4>Participación en convocatoria de Macroproyectos</h4>
+        <p class="desc">Primera participación en convocatoria del Ministerio de Ambiente y Desarrollo Sostenible para Macroproyectos de inversión ambiental.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="fecha">2024 · Q4</div>
+        <h4>Propuesta técnica — Alcaldía de Mariquita (Tolima)</h4>
+        <p class="desc">Radicación de propuesta de trabajo para instrumentos de planificación territorial en el municipio.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="fecha">2025 · Q1</div>
+        <h4>Propuestas — Prado, Campoalegre, Paicol, San Agustín</h4>
+        <p class="desc">Presentación de propuestas técnicas a cuatro alcaldías del Tolima y Huila para formulación de instrumentos de OT y PMGRD.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="fecha">2025 · Q3</div>
+        <h4>Segunda convocatoria — Macroproyectos MinAmbiente</h4>
+        <p class="desc">Segunda participación en convocatoria nacional, consolidando capacidad técnica y portafolio institucional.</p>
+      </div>
+      <div class="timeline-item presente">
+        <div class="fecha">Hoy · 2026</div>
+        <h4>Pipeline activo</h4>
+        <p class="desc">Varias propuestas en evaluación y gestiones comerciales en curso. Capacidad instalada para nuevos contratos de consultoría con entes territoriales, ministerios, cooperación internacional y sector privado.</p>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">10</div>
+  <div class="page-tag">08 · Trayectoria</div>
+</section>
+
+<!-- ════════════ PAGE 11 — TERRITORIOS ════════════ -->
+<section class="page">
+  <div class="page-inner">
+    <div class="eyebrow">09 · Cobertura territorial</div>
+    <h2 class="section-title">Territorios donde<br /><em>hemos trabajado</em>.</h2>
+    <p class="lead" style="margin-top: 18px; max-width: 580px;">Departamentos y municipios donde OTS ha radicado propuestas técnicas o ejecutado consultoría. Disponibilidad para todo el territorio nacional.</p>
+
+    <div class="territorios-section">
+      <div class="terr-block">
+        <h3>Tolima <span class="dept-tag">Departamento</span></h3>
+        <ul>
+          <li>San Sebastián de Mariquita</li>
+          <li>Prado</li>
+        </ul>
+      </div>
+      <div class="terr-block">
+        <h3>Huila <span class="dept-tag">Departamento</span></h3>
+        <ul>
+          <li>Campoalegre</li>
+          <li>Paicol</li>
+          <li>San Agustín</li>
+        </ul>
+      </div>
+      <div class="terr-block">
+        <h3>Nivel nacional <span class="dept-tag">Convocatorias</span></h3>
+        <ul>
+          <li>MinAmbiente — Macroproyectos 2024</li>
+          <li>MinAmbiente — Macroproyectos 2025</li>
+        </ul>
+      </div>
+      <div class="terr-block">
+        <h3>Capacidad <span class="dept-tag">Disponible</span></h3>
+        <ul>
+          <li>Caquetá · Putumayo · Amazonia</li>
+          <li>Cundinamarca · Boyacá · Santanderes</li>
+          <li>Costa Caribe · Pacífico</li>
+          <li>Eje Cafetero · Antioquia</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top: auto; padding-top: 28px; background: white; padding: 22px 26px; border-left: 3px solid var(--accent);">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--accent); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px;">◦ Modalidades de trabajo</div>
+      <p class="body" style="margin: 0;"><strong>Presencial</strong> en campo durante fases de diagnóstico y participación. <strong>Remoto</strong> para análisis técnico, cartografía y formulación. <strong>Mixto</strong> con cronograma acordado para procesos extendidos. Disponibilidad nacional con base operativa en Bogotá.</p>
+    </div>
+  </div>
+  <div class="page-num">11</div>
+  <div class="page-tag">09 · Territorios</div>
+</section>
+
+<!-- ════════════ PAGE 12 — PRINCIPIOS ════════════ -->
+<section class="page">
+  <div class="page-inner">
+    <div class="eyebrow">10 · Compromisos</div>
+    <h2 class="section-title">Cuatro principios<br /><em>no negociables</em>.</h2>
+    <p class="lead" style="margin-top: 18px; max-width: 580px;">Lo que sostiene cada producto que entregamos, independientemente del cliente o el monto contractual.</p>
+
+    <div class="principles-grid">
+      <div class="principle">
+        <div class="num">01 · Rigor</div>
+        <h3>Rigor técnico</h3>
+        <p class="desc">Metodologías oficiales (MGA, DNP, MinAmbiente, UNGRD) y estándares académicos verificables. Cada producto pasa por revisión técnica interna antes de ser entregado.</p>
+      </div>
+      <div class="principle">
+        <div class="num">02 · Territorio</div>
+        <h3>Enfoque territorial</h3>
+        <p class="desc">Cada territorio es único. Diagnósticos construidos en campo, no en escritorio. Trabajo directo con autoridades locales, comunidades y actores sociales.</p>
+      </div>
+      <div class="principle">
+        <div class="num">03 · Sostenibilidad</div>
+        <h3>Sostenibilidad ambiental</h3>
+        <p class="desc">Los proyectos que formulamos integran las determinantes ambientales como punto de partida — no como capítulo final. Gestión del riesgo y cambio climático son transversales.</p>
+      </div>
+      <div class="principle">
+        <div class="num">04 · Trazabilidad</div>
+        <h3>Transparencia y plazos</h3>
+        <p class="desc">Productos trazables, documentados y entregados en plazos acordados. Comunicación quincenal con la contraparte y reuniones de seguimiento estructuradas.</p>
+      </div>
+    </div>
+
+    <div style="margin-top: auto; padding-top: 28px; display: flex; justify-content: space-between; align-items: flex-end; gap: 30px;">
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--ink-soft); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px;">◦ Documentación bajo solicitud</div>
+        <p class="body" style="margin: 0; max-width: 420px;">RUT · Certificado de existencia y representación legal · Estados financieros · Hojas de vida del equipo · Certificaciones de experiencia · Pólizas y garantías.</p>
+      </div>
+      <div style="text-align: right;">
+        <div style="font-size: 28px; font-weight: 800; color: var(--primary); letter-spacing: -0.6px; line-height: 1;">OTS<span style="color: var(--accent);">.</span></div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; letter-spacing: 1.8px; color: var(--ink-soft); text-transform: uppercase; margin-top: 4px;">2024 · 2026</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">12</div>
+  <div class="page-tag">10 · Principios</div>
+</section>
+
+<!-- ════════════ PAGE 13 — CIERRE / CONTACTO ════════════ -->
+<section class="page closing-page">
+  <svg class="cover-bg" viewBox="0 0 1200 1700" preserveAspectRatio="xMidYMid slice">
+    <g stroke="#E8E6DC" stroke-width="0.7" fill="none">
+      <path d="M -100 800 Q 200 600, 600 700 Q 1000 800, 1400 650" />
+      <path d="M -100 900 Q 200 720, 600 820 Q 1000 920, 1400 780" />
+      <path d="M -100 1000 Q 200 840, 600 940 Q 1000 1040, 1400 900" />
+      <path d="M -100 1100 Q 200 960, 600 1060 Q 1000 1160, 1400 1020" />
+      <path d="M -100 700 Q 200 500, 600 600 Q 1000 700, 1400 550" />
+    </g>
+  </svg>
+
+  <div class="closing-inner">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+      <div>
+        <div style="font-size: 26px; font-weight: 800; color: var(--ink-light); letter-spacing: -0.8px;">OTS<span style="color: var(--accent);">.</span></div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; letter-spacing: 2px; color: rgba(232,230,220,0.55); text-transform: uppercase; margin-top: 4px;">Ordenamiento Territorial Sostenible</div>
+      </div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1.8px; color: rgba(232,230,220,0.5); text-transform: uppercase; text-align: right;">11 · Contacto<br />Cierre del documento</div>
+    </div>
+
+    <div class="closing-msg">
+      <div class="mono">◦ Hablemos de su próximo proyecto</div>
+      <h2>Si tiene un<br />territorio en mente,<br /><em>nosotros podemos<br />ayudarle a formularlo</em>.</h2>
+      <p class="sub">Recibimos consultas de alcaldías, gobernaciones, ministerios, agencias de cooperación y empresas privadas. Tiempo de respuesta promedio: menos de 48 horas en días hábiles.</p>
+    </div>
+
+    <div class="contact-block">
+      <div>
+        <div class="label">Correo</div>
+        <div class="val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="573825333239363a3e3239233838232417303a363e3b7934383a">[email&#160;protected]</a></div>
+      </div>
+      <div>
+        <div class="label">Ubicación</div>
+        <div class="val">Bogotá D.C.<br />Colombia</div>
+      </div>
+      <div>
+        <div class="label">Web · LinkedIn</div>
+        <div class="val">ots-sas.netlify.app<br />linkedin.com/company/100469055</div>
+      </div>
+    </div>
+
+    <div class="closing-foot">
+      <div>OTS S.A.S · NIT 901.815.692-3</div>
+      <div>Portafolio institucional · ed. 01 · 2026</div>
+    </div>
+  </div>
+</section>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+</html>
