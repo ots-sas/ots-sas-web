@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Servicios · OTS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #0B242C; }
+  body { font-family: "Archivo", sans-serif; color: #0B3D4F; -webkit-font-smoothing: antialiased; }
+  a:hover { opacity: 0.85; }
+  ::selection { background: #C47A3D; color: #fff; }
+  html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" data-presets="react" src="shared.jsx"></script>
+
+<script type="text/babel" data-presets="react">
+
+// ─── INDEX (sticky sidebar TOC) ─────────────────────────────
+function ServicesIndex({ lang, active, onClick }) {
+  const t = lang === 'en' ? { eyebrow: 'Index', label: 'Service' } : { eyebrow: 'Índice', label: 'Servicio' };
+  return (
+    <aside style={{ position: 'sticky', top: 90, alignSelf: 'start' }}>
+      <div style={{ fontSize: 10, fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 2, color: '#5A6B72',
+        textTransform: 'uppercase', marginBottom: 20, paddingBottom: 14, borderBottom: '1px solid rgba(11,61,79,.15)' }}>
+        ◦ {t.eyebrow} · 07
+      </div>
+      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 4 }}>
+        {SERVICIOS.map((s) => {
+          const isActive = active === s.num;
+          return (
+            <li key={s.num}>
+              <a href={`#s-${s.num}`} onClick={(e) => onClick(e, s.num)} style={{
+                display: 'flex', gap: 12, padding: '10px 12px', textDecoration: 'none',
+                color: isActive ? FUSION_PRIMARY : '#5A6B72', fontSize: 13,
+                background: isActive ? 'rgba(196,122,61,.08)' : 'transparent',
+                borderLeft: `2px solid ${isActive ? FUSION_ACCENT : 'transparent'}`,
+                transition: 'all .15s', fontWeight: isActive ? 600 : 400, lineHeight: 1.35
+              }}>
+                <span style={{ fontFamily: '"IBM Plex Mono", monospace', color: FUSION_ACCENT, fontSize: 11, paddingTop: 2 }}>{s.num}</span>
+                <span>{lang === 'en' ? s.titulo_en : s.titulo}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </aside>);
+}
+
+// ─── DETAIL ROW ─────────────────────────────────────────────
+function ServiceDetail({ s, lang, registerRef }) {
+  return (
+    <article ref={registerRef(s.num)} id={`s-${s.num}`} style={{ paddingTop: 60, paddingBottom: 60, borderTop: '1px solid rgba(11,61,79,.15)' }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 18, marginBottom: 20 }}>
+        <div style={{ fontSize: 56, fontWeight: 800, color: FUSION_ACCENT, fontFamily: '"IBM Plex Mono", monospace',
+          letterSpacing: -2, lineHeight: 1 }}>
+          {s.num}
+        </div>
+        <div style={{ fontSize: 11, fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 2, color: '#5A6B72', textTransform: 'uppercase' }}>
+          {lang === 'en' ? 'Service' : 'Servicio'}
+        </div>
+      </div>
+      <h2 style={{ fontSize: 36, fontWeight: 800, color: FUSION_PRIMARY, letterSpacing: -1, lineHeight: 1.15, margin: 0, maxWidth: 700 }}>
+        {lang === 'en' ? s.titulo_en : s.titulo}
+      </h2>
+      <p style={{ fontSize: 17, color: '#2C4A54', lineHeight: 1.65, marginTop: 22, maxWidth: 720 }}>
+        {lang === 'en' ? s.desc_en : s.desc}
+      </p>
+      <div style={{ marginTop: 24, padding: '24px 28px', background: 'rgba(11,61,79,.04)', borderLeft: `3px solid ${FUSION_ACCENT}`, maxWidth: 720 }}>
+        <div style={{ fontSize: 10, color: FUSION_ACCENT, fontFamily: '"IBM Plex Mono", monospace',
+          letterSpacing: 2, textTransform: 'uppercase', marginBottom: 10 }}>
+          {lang === 'en' ? 'Detail' : 'Detalle'}
+        </div>
+        <div style={{ fontSize: 15, color: '#2C4A54', lineHeight: 1.65 }}>
+          {lang === 'en' ? s.detalle_en : s.detalle}
+        </div>
+      </div>
+    </article>);
+}
+
+// ─── METHODOLOGY (full version) ─────────────────────────────
+function MetodologiaSection({ lang }) {
+  const t = lang === 'en' ?
+    { eyebrow: 'How we work', h: 'Method, not improvisation', sub: 'Every engagement runs through the same four phases — adapted to the territory and the client, never invented from scratch.' } :
+    { eyebrow: 'Metodología', h: 'Método, no improvisación', sub: 'Cada proyecto pasa por las mismas cuatro fases — adaptadas al territorio y al cliente, nunca inventadas desde cero.' };
+  return (
+    <section style={{ background: FUSION_DARK, color: FUSION_INK_LIGHT, padding: '110px 40px', fontFamily: '"Archivo", sans-serif' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.3fr', gap: 80, alignItems: 'end', marginBottom: 60 }}>
+          <div>
+            <div style={{ fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', color: FUSION_ACCENT,
+              fontFamily: '"IBM Plex Mono", monospace', marginBottom: 18 }}>◦ {t.eyebrow}</div>
+            <h2 style={{ fontSize: 52, fontWeight: 800, letterSpacing: -1.5, margin: 0, lineHeight: 1.05 }}>{t.h}</h2>
+          </div>
+          <p style={{ fontSize: 17, color: 'rgba(232,230,220,.72)', lineHeight: 1.6, margin: 0, maxWidth: 560 }}>{t.sub}</p>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24 }}>
+          {METODOLOGIA.map((m, i) =>
+            <div key={i} style={{ background: 'rgba(232,230,220,.04)', border: '1px solid rgba(232,230,220,.1)', padding: '32px 26px', borderTop: `3px solid ${FUSION_ACCENT}`, minHeight: 240 }}>
+              <div style={{ fontSize: 12, color: FUSION_ACCENT, fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 1.5 }}>
+                {lang === 'en' ? 'PHASE' : 'FASE'} {m.fase}
+              </div>
+              <div style={{ fontSize: 22, fontWeight: 700, marginTop: 12, letterSpacing: -0.4 }}>
+                {lang === 'en' ? m.nombre_en : m.nombre}
+              </div>
+              <div style={{ fontSize: 14, color: 'rgba(232,230,220,.72)', lineHeight: 1.55, marginTop: 12 }}>
+                {lang === 'en' ? m.desc_en : m.desc}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>);
+}
+
+// ─── NEXT-PAGE STRIP ────────────────────────────────────────
+function NextStrip({ lang }) {
+  const t = lang === 'en' ?
+    { l: 'Next', a: 'Track record', b: 'Where we are working today.', cta: 'Continue →' } :
+    { l: 'Sigue', a: 'Trayectoria', b: 'Dónde estamos trabajando hoy.', cta: 'Continuar →' };
+  return (
+    <a href="trayectoria.html" style={{
+      display: 'block', background: FUSION_BG, padding: '60px 40px', textDecoration: 'none', color: 'inherit',
+      borderTop: '1px solid rgba(11,61,79,.1)', fontFamily: '"Archivo", sans-serif'
+    }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 2fr 1fr',
+        gap: 40, alignItems: 'center' }}>
+        <div style={{ fontSize: 10, fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 2, color: FUSION_ACCENT, textTransform: 'uppercase' }}>
+          {t.l} · 02
+        </div>
+        <div>
+          <div style={{ fontSize: 32, fontWeight: 800, color: FUSION_PRIMARY, letterSpacing: -0.8 }}>{t.a}</div>
+          <div style={{ fontSize: 15, color: '#2C4A54', opacity: 0.78, marginTop: 6 }}>{t.b}</div>
+        </div>
+        <div style={{ justifySelf: 'end', fontSize: 14, fontWeight: 600, color: FUSION_ACCENT }}>{t.cta}</div>
+      </div>
+    </a>);
+}
+
+// ─── APP ────────────────────────────────────────────────────
+function App() {
+  const [lang, setLang] = useLang();
+  const [active, setActive] = React.useState('01');
+  const refs = React.useRef({});
+  const registerRef = (num) => (el) => { if (el) refs.current[num] = el; };
+
+  React.useEffect(() => {
+    const obs = new IntersectionObserver((entries) => {
+      const visible = entries.filter(e => e.isIntersecting).sort((a,b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      if (visible[0]) {
+        const num = visible[0].target.id.replace('s-', '');
+        setActive(num);
+      }
+    }, { rootMargin: '-100px 0px -60% 0px', threshold: 0 });
+    Object.values(refs.current).forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+
+  const onIndexClick = (e, num) => {
+    e.preventDefault();
+    const el = refs.current[num];
+    if (el) {
+      const top = el.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top, behavior: 'smooth' });
+      setActive(num);
+    }
+  };
+
+  const t = lang === 'en' ? {
+    eyebrow: 'Services', title: 'Seven service lines.', titleAccent: 'One objective.',
+    sub: 'Turning territorial knowledge into well-formulated public investment, environmental rigour and instruments that hold up to scrutiny.',
+    bc: [{ href: 'index.html', label: 'Home' }, { label: 'Services' }]
+  } : {
+    eyebrow: 'Servicios', title: 'Siete líneas de servicio.', titleAccent: 'Un solo objetivo.',
+    sub: 'Convertir el conocimiento territorial en inversión pública bien formulada, rigor ambiental e instrumentos que resistan el escrutinio.',
+    bc: [{ href: 'index.html', label: 'Inicio' }, { label: 'Servicios' }]
+  };
+
+  return (
+    <React.Fragment>
+      <Header lang={lang} setLang={setLang} current="servicios" />
+      <PageHero eyebrow={t.eyebrow} kicker="01 / 04" title={t.title} titleAccent={t.titleAccent} sub={t.sub} />
+      <Breadcrumb items={t.bc} />
+      <section style={{ background: '#fff', padding: '90px 40px', fontFamily: '"Archivo", sans-serif' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '280px 1fr', gap: 80 }}>
+          <ServicesIndex lang={lang} active={active} onClick={onIndexClick} />
+          <div>
+            {SERVICIOS.map((s) => (
+              <ServiceDetail key={s.num} s={s} lang={lang} registerRef={registerRef} />
+            ))}
+          </div>
+        </div>
+      </section>
+      <MetodologiaSection lang={lang} />
+      <NextStrip lang={lang} />
+      <Footer lang={lang} />
+    </React.Fragment>);
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

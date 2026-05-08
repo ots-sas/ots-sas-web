@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nosotros · OTS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #0B242C; }
+  body { font-family: "Archivo", sans-serif; color: #0B3D4F; -webkit-font-smoothing: antialiased; }
+  a:hover { opacity: 0.85; }
+  ::selection { background: #C47A3D; color: #fff; }
+  html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" data-presets="react" src="shared.jsx"></script>
+
+<script type="text/babel" data-presets="react">
+
+// ─── FOUNDER BIO (full version) ─────────────────────────────
+function FounderBio({ lang }) {
+  const t = lang === 'en' ? {
+    eyebrow: 'Founding partner',
+    name: 'A multidisciplinary team',
+    h: 'Economists, engineers, planners — with combined territorial experience',
+    p1: 'OTS brings together economists, environmental engineers, planners and territorial specialists with combined experience advising local governments, ministries and multilateral agencies.',
+    p2: 'Our founding partner holds a Masters in Regional Development and Territorial Planning (Universidad Autónoma de Manizales), a Masters in Economics (Universidad de los Andes), and is a PhD candidate in Economics at the same institution.',
+    p3: '16 years of teaching experience in Economics, 8 years as a consultant, advisor and contractor for public entities, private firms and multilateral organizations.',
+    cred: 'Key credentials',
+    creds: [
+      { l: 'Universidad de los Andes', d: 'PhD candidate · Economics' },
+      { l: 'Universidad de los Andes', d: 'M.Sc. Economics' },
+      { l: 'Universidad Autónoma de Manizales', d: 'M.Sc. Regional Development & Territorial Planning' },
+      { l: 'Universidad del Tolima', d: 'B.A. Economics' }
+    ],
+    callout: 'The firm is young — founded March 2024 — but the people behind it are not.'
+  } : {
+    eyebrow: 'Socio fundador',
+    name: 'Un equipo multidisciplinario',
+    h: 'Economistas, ingenieros, planificadores — con experiencia territorial combinada',
+    p1: 'OTS reúne economistas, ingenieros ambientales, planificadores y especialistas en ordenamiento territorial con trayectoria asesorando entes territoriales, ministerios y agencias multilaterales.',
+    p2: 'Nuestro socio fundador es Economista (Universidad del Tolima), Magíster en Desarrollo Regional y Planificación del Territorio (Universidad Autónoma de Manizales), Magíster en Economía (Universidad de los Andes) y Candidato a Doctor en Economía en la misma institución.',
+    p3: '16 años de experiencia docente en Economía y 8 años como consultor, asesor y contratista en entidades públicas, privadas y multilaterales.',
+    cred: 'Credenciales clave',
+    creds: [
+      { l: 'Universidad de los Andes', d: 'Candidato a Doctor · Economía' },
+      { l: 'Universidad de los Andes', d: 'Magíster en Economía' },
+      { l: 'Universidad Autónoma de Manizales', d: 'Magíster · Desarrollo Regional y Planificación' },
+      { l: 'Universidad del Tolima', d: 'Economista' }
+    ],
+    callout: 'La firma es joven — fundada en marzo 2024 — pero las personas detrás no lo son.'
+  };
+  return (
+    <section style={{ background: '#fff', padding: '110px 40px', fontFamily: '"Archivo", sans-serif' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div style={{ fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', color: FUSION_ACCENT,
+          fontFamily: '"IBM Plex Mono", monospace', marginBottom: 18 }}>◦ {t.eyebrow}</div>
+        <h2 style={{ fontSize: 48, fontWeight: 800, color: FUSION_PRIMARY, letterSpacing: -1.4, margin: 0, lineHeight: 1.08, maxWidth: 880 }}>{t.h}</h2>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: 80, marginTop: 60, alignItems: 'start' }}>
+          <div>
+            <p style={{ fontSize: 17, color: '#2C4A54', lineHeight: 1.65, margin: 0 }}>{t.p1}</p>
+            <p style={{ fontSize: 17, color: '#2C4A54', lineHeight: 1.65, marginTop: 20 }}>{t.p2}</p>
+            <p style={{ fontSize: 17, color: '#2C4A54', lineHeight: 1.65, marginTop: 20 }}>{t.p3}</p>
+            <div style={{ marginTop: 36, padding: '22px 24px', background: 'rgba(196,122,61,.08)',
+              borderLeft: `3px solid ${FUSION_ACCENT}` }}>
+              <div style={{ fontSize: 16, color: FUSION_PRIMARY, lineHeight: 1.55, fontStyle: 'italic', fontWeight: 500 }}>
+                {t.callout}
+              </div>
+            </div>
+          </div>
+          <div style={{ background: FUSION_BG, padding: '32px 28px' }}>
+            <div style={{ fontSize: 10, color: FUSION_ACCENT, fontFamily: '"IBM Plex Mono", monospace',
+              letterSpacing: 2, textTransform: 'uppercase', marginBottom: 22 }}>
+              ◦ {t.cred}
+            </div>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 0 }}>
+              {t.creds.map((c, i) => (
+                <li key={i} style={{ paddingTop: 18, paddingBottom: 18, borderTop: i === 0 ? 'none' : '1px solid rgba(11,61,79,.12)' }}>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: FUSION_PRIMARY, letterSpacing: -0.2 }}>{c.l}</div>
+                  <div style={{ fontSize: 13, color: '#2C4A54', opacity: 0.78, marginTop: 4 }}>{c.d}</div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>);
+}
+
+// ─── PRINCIPLES ─────────────────────────────────────────────
+function Principios({ lang }) {
+  const t = lang === 'en' ?
+    { eyebrow: 'Principles', h: 'How we hold ourselves accountable' } :
+    { eyebrow: 'Principios', h: 'Cómo nos exigimos a nosotros mismos' };
+  return (
+    <section style={{ background: FUSION_BG, padding: '110px 40px', fontFamily: '"Archivo", sans-serif' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <div style={{ fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', color: FUSION_ACCENT,
+          fontFamily: '"IBM Plex Mono", monospace', marginBottom: 18 }}>◦ {t.eyebrow}</div>
+        <h2 style={{ fontSize: 52, fontWeight: 800, color: FUSION_PRIMARY, letterSpacing: -1.5, margin: 0, lineHeight: 1.05, marginBottom: 60 }}>{t.h}</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 1, background: 'rgba(11,61,79,.12)', border: '1px solid rgba(11,61,79,.12)' }}>
+          {PRINCIPIOS.map((p, i) => (
+            <div key={i} style={{ background: FUSION_BG, padding: '40px 36px' }}>
+              <div style={{ fontSize: 12, color: FUSION_ACCENT, fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 1.5, marginBottom: 14 }}>
+                0{i + 1}
+              </div>
+              <div style={{ fontSize: 26, fontWeight: 800, color: FUSION_PRIMARY, letterSpacing: -0.6, lineHeight: 1.2 }}>
+                {lang === 'en' ? p.t_en : p.t}
+              </div>
+              <div style={{ fontSize: 15, color: '#2C4A54', opacity: 0.78, lineHeight: 1.6, marginTop: 14, maxWidth: 460 }}>
+                {lang === 'en' ? p.d_en : p.d}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>);
+}
+
+// ─── TEAM CAPABILITIES ──────────────────────────────────────
+function Capacidades({ lang }) {
+  const t = lang === 'en' ? {
+    eyebrow: 'Team capabilities', h: 'Combined disciplines',
+    sub: 'A working team that crosses disciplines — every project assembles the right specialists.',
+    items: [
+      { area: 'Economics & policy', detail: 'Public investment, project banks, evaluation' },
+      { area: 'Environmental engineering', detail: 'EIA, PMA, environmental licensing' },
+      { area: 'Territorial planning', detail: 'POT, PBOT, EOT, urban-rural articulation' },
+      { area: 'Risk management', detail: 'PMGRD, hazard & vulnerability analysis' },
+      { area: 'Citizen participation', detail: 'Methodology design, prior consultation' },
+      { area: 'Public finance', detail: 'SGR, MGA, multi-year investment plans' }
+    ]
+  } : {
+    eyebrow: 'Capacidades del equipo', h: 'Disciplinas combinadas',
+    sub: 'Un equipo que cruza disciplinas — cada proyecto reúne a los especialistas correctos.',
+    items: [
+      { area: 'Economía y política pública', detail: 'Inversión pública, banco de proyectos, evaluación' },
+      { area: 'Ingeniería ambiental', detail: 'EIA, PMA, licenciamiento ambiental' },
+      { area: 'Ordenamiento territorial', detail: 'POT, PBOT, EOT, articulación urbano-rural' },
+      { area: 'Gestión del riesgo', detail: 'PMGRD, análisis de amenaza y vulnerabilidad' },
+      { area: 'Participación ciudadana', detail: 'Diseño metodológico, consulta previa' },
+      { area: 'Finanzas públicas', detail: 'SGR, MGA, plan plurianual de inversiones' }
+    ]
+  };
+  return (
+    <section style={{ background: FUSION_DARK, color: FUSION_INK_LIGHT, padding: '110px 40px', fontFamily: '"Archivo", sans-serif' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 80, alignItems: 'end', marginBottom: 60 }}>
+          <div>
+            <div style={{ fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', color: FUSION_ACCENT,
+              fontFamily: '"IBM Plex Mono", monospace', marginBottom: 18 }}>◦ {t.eyebrow}</div>
+            <h2 style={{ fontSize: 48, fontWeight: 800, letterSpacing: -1.4, margin: 0, lineHeight: 1.08 }}>{t.h}</h2>
+          </div>
+          <p style={{ fontSize: 17, color: 'rgba(232,230,220,.72)', lineHeight: 1.55, margin: 0, maxWidth: 540 }}>{t.sub}</p>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, background: 'rgba(232,230,220,.1)' }}>
+          {t.items.map((x, i) => (
+            <div key={i} style={{ background: FUSION_DARK, padding: '32px 28px' }}>
+              <div style={{ fontSize: 11, color: FUSION_ACCENT, fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 1.5, marginBottom: 14 }}>
+                0{i + 1}
+              </div>
+              <div style={{ fontSize: 18, fontWeight: 700, letterSpacing: -0.2, marginBottom: 8 }}>{x.area}</div>
+              <div style={{ fontSize: 14, color: 'rgba(232,230,220,.65)', lineHeight: 1.5 }}>{x.detail}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>);
+}
+
+// ─── NEXT-PAGE STRIP ────────────────────────────────────────
+function NextStrip({ lang }) {
+  const t = lang === 'en' ?
+    { l: 'Next', a: 'Contact', b: 'Build the project together.', cta: 'Continue →' } :
+    { l: 'Sigue', a: 'Contacto', b: 'Construyamos el proyecto juntos.', cta: 'Continuar →' };
+  return (
+    <a href="contacto.html" style={{
+      display: 'block', background: FUSION_BG, padding: '60px 40px', textDecoration: 'none', color: 'inherit',
+      borderTop: '1px solid rgba(11,61,79,.1)', fontFamily: '"Archivo", sans-serif'
+    }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 2fr 1fr',
+        gap: 40, alignItems: 'center' }}>
+        <div style={{ fontSize: 10, fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 2, color: FUSION_ACCENT, textTransform: 'uppercase' }}>
+          {t.l} · 04
+        </div>
+        <div>
+          <div style={{ fontSize: 32, fontWeight: 800, color: FUSION_PRIMARY, letterSpacing: -0.8 }}>{t.a}</div>
+          <div style={{ fontSize: 15, color: '#2C4A54', opacity: 0.78, marginTop: 6 }}>{t.b}</div>
+        </div>
+        <div style={{ justifySelf: 'end', fontSize: 14, fontWeight: 600, color: FUSION_ACCENT }}>{t.cta}</div>
+      </div>
+    </a>);
+}
+
+// ─── APP ────────────────────────────────────────────────────
+function App() {
+  const [lang, setLang] = useLang();
+  const t = lang === 'en' ? {
+    eyebrow: 'About', title: 'A young firm.', titleAccent: 'Senior people.',
+    sub: 'OTS brings together economists, environmental engineers and planners with combined experience advising local governments, ministries and multilateral agencies.',
+    bc: [{ href: 'index.html', label: 'Home' }, { label: 'About' }]
+  } : {
+    eyebrow: 'Nosotros', title: 'Una firma joven.', titleAccent: 'Gente con trayectoria.',
+    sub: 'OTS reúne economistas, ingenieros ambientales y planificadores con trayectoria asesorando entes territoriales, ministerios y agencias multilaterales.',
+    bc: [{ href: 'index.html', label: 'Inicio' }, { label: 'Nosotros' }]
+  };
+  return (
+    <React.Fragment>
+      <Header lang={lang} setLang={setLang} current="nosotros" />
+      <PageHero eyebrow={t.eyebrow} kicker="03 / 04" title={t.title} titleAccent={t.titleAccent} sub={t.sub} />
+      <Breadcrumb items={t.bc} />
+      <FounderBio lang={lang} />
+      <Capacidades lang={lang} />
+      <Principios lang={lang} />
+      <NextStrip lang={lang} />
+      <Footer lang={lang} />
+    </React.Fragment>);
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

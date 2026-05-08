@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Contacto · OTS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #0B242C; }
+  body { font-family: "Archivo", sans-serif; color: #0B3D4F; -webkit-font-smoothing: antialiased; }
+  a:hover { opacity: 0.85; }
+  ::selection { background: #C47A3D; color: #fff; }
+  html { scroll-behavior: smooth; }
+  input:focus, textarea:focus { border-bottom-color: #C47A3D !important; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" data-presets="react" src="shared.jsx"></script>
+
+<script type="text/babel" data-presets="react">
+
+function Field({ label, name, type = 'text', textarea }) {
+  const base = { background: 'transparent', border: 'none', borderBottom: '1px solid rgba(232,230,220,.2)',
+    color: FUSION_INK_LIGHT, fontSize: 14, padding: '10px 0', fontFamily: 'inherit', outline: 'none', width: '100%', resize: 'vertical' };
+  return (
+    <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+      <span style={{ fontSize: 10, letterSpacing: 2, color: 'rgba(232,230,220,.55)', fontFamily: '"IBM Plex Mono", monospace', textTransform: 'uppercase' }}>{label}</span>
+      {textarea ?
+        <textarea name={name} rows={4} required style={base} /> :
+        <input name={name} type={type} required style={base} />}
+    </label>);
+}
+
+function ContactForm({ lang }) {
+  const t = lang === 'en' ? {
+    eyebrow: 'Send a brief',
+    h: 'Tell us the case',
+    sub: 'Writing a call for proposals, evaluating a territorial instrument, or just exploring options? Send the brief — we reply within 48 hours.',
+    nameL: 'Name', entityL: 'Entity / organization', emailL: 'Email', msgL: 'Brief description of the need',
+    send: 'Send', sending: 'Sending...', sent: "Message received. We'll reply soon.", errorMsg: "Couldn't send. Please try again or email us directly."
+  } : {
+    eyebrow: 'Envíanos un brief',
+    h: 'Cuéntanos el caso',
+    sub: '¿Estás armando una convocatoria, evaluando un instrumento territorial o explorando opciones? Cuéntanos — respondemos en menos de 48 horas.',
+    nameL: 'Nombre', entityL: 'Entidad u organización', emailL: 'Correo', msgL: 'Breve descripción de la necesidad',
+    send: 'Enviar', sending: 'Enviando...', sent: 'Mensaje recibido. Te contactamos pronto.', errorMsg: 'No se pudo enviar. Intenta de nuevo o escríbenos directamente al correo.'
+  };
+  const [sent, setSent] = React.useState(false);
+  const [submitting, setSubmitting] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setError(false);
+    const formEl = e.currentTarget;
+    const data = new FormData(formEl);
+    try {
+      const resp = await fetch('https://formspree.io/f/xrerryje', {
+        method: 'POST', body: data, headers: { 'Accept': 'application/json' }
+      });
+      if (resp.ok) { setSent(true); formEl.reset(); } else { setError(true); }
+    } catch (err) { setError(true); }
+    setSubmitting(false);
+  };
+  return (
+    <div>
+      <div style={{ fontSize: 10, letterSpacing: 2, textTransform: 'uppercase', color: FUSION_ACCENT,
+        fontFamily: '"IBM Plex Mono", monospace', marginBottom: 14 }}>◦ {t.eyebrow}</div>
+      <h2 style={{ fontSize: 36, fontWeight: 800, letterSpacing: -1, margin: 0, lineHeight: 1.1, color: FUSION_INK_LIGHT }}>{t.h}</h2>
+      <p style={{ fontSize: 15, color: 'rgba(232,230,220,.72)', lineHeight: 1.6, marginTop: 16, marginBottom: 32 }}>{t.sub}</p>
+      <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+        {sent ?
+          <div style={{ padding: 30, background: 'rgba(196,122,61,.15)', border: `1px solid ${FUSION_ACCENT}`, fontSize: 14, color: FUSION_INK_LIGHT }}>
+            ✓ {t.sent}
+          </div> :
+          <React.Fragment>
+            <Field label={t.nameL} name="name" />
+            <Field label={t.entityL} name="entity" />
+            <Field label={t.emailL} name="email" type="email" />
+            <Field label={t.msgL} name="msg" textarea />
+            {error &&
+              <div style={{ padding: 14, background: 'rgba(220,80,80,.15)', border: '1px solid rgba(220,80,80,.5)', fontSize: 13, color: '#F4C4C4' }}>
+                ⚠ {t.errorMsg}
+              </div>
+            }
+            <button type="submit" disabled={submitting} style={{ background: FUSION_ACCENT, color: '#fff', border: 'none',
+              padding: '14px 22px', fontSize: 14, fontWeight: 600, cursor: submitting ? 'wait' : 'pointer', borderRadius: 2,
+              fontFamily: 'inherit', alignSelf: 'flex-start', marginTop: 4, letterSpacing: 0.3, opacity: submitting ? 0.7 : 1 }}>
+              {submitting ? t.sending : `${t.send} →`}
+            </button>
+          </React.Fragment>
+        }
+      </form>
+    </div>);
+}
+
+function ContactInfo({ lang }) {
+  const t = lang === 'en' ?
+    { eyebrow: 'Direct lines', email: 'Email', loc: 'Location', loc_v: 'Bogotá D.C., Colombia', sla: 'Response time', sla_v: 'Within 48 hours · business days', linkedin: 'LinkedIn', pdf: 'Portfolio (PDF)', social: 'Other channels' } :
+    { eyebrow: 'Canales directos', email: 'Correo', loc: 'Ubicación', loc_v: 'Bogotá D.C., Colombia', sla: 'Tiempo de respuesta', sla_v: 'Menos de 48 horas · días hábiles', linkedin: 'LinkedIn', pdf: 'Portafolio (PDF)', social: 'Otros canales' };
+  const Row = ({ label, children }) => (
+    <div style={{ paddingTop: 22, paddingBottom: 22, borderTop: '1px solid rgba(232,230,220,.12)' }}>
+      <div style={{ fontSize: 10, letterSpacing: 2, color: 'rgba(232,230,220,.5)',
+        fontFamily: '"IBM Plex Mono", monospace', textTransform: 'uppercase', marginBottom: 8 }}>{label}</div>
+      <div>{children}</div>
+    </div>);
+  return (
+    <div>
+      <div style={{ fontSize: 10, letterSpacing: 2, textTransform: 'uppercase', color: FUSION_ACCENT,
+        fontFamily: '"IBM Plex Mono", monospace', marginBottom: 14 }}>◦ {t.eyebrow}</div>
+      <Row label={t.email}>
+        <a href="mailto:ordenamientoots@gmail.com" style={{ fontSize: 20, color: FUSION_INK_LIGHT, fontWeight: 600, textDecoration: 'none', borderBottom: `1px solid ${FUSION_ACCENT}`, paddingBottom: 2 }}>
+          ordenamientoots@gmail.com
+        </a>
+      </Row>
+      <Row label={t.loc}>
+        <div style={{ fontSize: 17, color: FUSION_INK_LIGHT, fontWeight: 500 }}>{t.loc_v}</div>
+      </Row>
+      <Row label={t.sla}>
+        <div style={{ fontSize: 17, color: FUSION_INK_LIGHT, fontWeight: 500 }}>{t.sla_v}</div>
+      </Row>
+      <Row label={t.social}>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <a href="#" style={{ background: 'rgba(232,230,220,.08)', color: FUSION_INK_LIGHT, padding: '10px 16px', fontSize: 13, textDecoration: 'none', borderRadius: 2 }}>↗ {t.linkedin}</a>
+          <a href="#" style={{ background: 'rgba(232,230,220,.08)', color: FUSION_INK_LIGHT, padding: '10px 16px', fontSize: 13, textDecoration: 'none', borderRadius: 2 }}>↓ {t.pdf}</a>
+        </div>
+      </Row>
+    </div>);
+}
+
+function FAQ({ lang }) {
+  const t = lang === 'en' ? {
+    eyebrow: 'FAQ', h: 'Common questions',
+    items: [
+      { q: 'What kind of clients do you work with?', a: 'Local governments (municipalities and departments), national ministries, multilateral agencies and private firms with environmental licensing or territorial-planning needs.' },
+      { q: 'Do you participate in public calls (convocatorias)?', a: 'Yes — we have submitted to two consecutive Macroprojects calls from the Ministry of Environment, and to several municipal calls in Tolima and Huila.' },
+      { q: 'How do projects typically start?', a: 'Either a brief by email, a request for proposal (RFP), or a direct conversation. We respond within 48 hours with a clarifying conversation and a proposed scope.' },
+      { q: 'Where are you based?', a: 'Bogotá D.C., with field operations across Tolima, Huila and the broader Andean and Amazon regions.' }
+    ]
+  } : {
+    eyebrow: 'Preguntas frecuentes', h: 'Preguntas habituales',
+    items: [
+      { q: '¿Con qué tipo de clientes trabajan?', a: 'Entes territoriales (municipios y departamentos), ministerios, agencias multilaterales y firmas privadas con necesidades de licenciamiento ambiental o planificación territorial.' },
+      { q: '¿Participan en convocatorias públicas?', a: 'Sí — hemos participado en dos convocatorias consecutivas de Macroproyectos del Ministerio de Ambiente, y en varias convocatorias municipales en Tolima y Huila.' },
+      { q: '¿Cómo suelen empezar los proyectos?', a: 'Un brief por correo, una invitación a presentar propuesta o una conversación directa. Respondemos en menos de 48 horas con una conversación de aclaración y un alcance propuesto.' },
+      { q: '¿Dónde están?', a: 'En Bogotá D.C., con operaciones de campo en Tolima, Huila y otras regiones andinas y amazónicas.' }
+    ]
+  };
+  const [open, setOpen] = React.useState(0);
+  return (
+    <section style={{ background: '#fff', padding: '110px 40px', fontFamily: '"Archivo", sans-serif' }}>
+      <div style={{ maxWidth: 900, margin: '0 auto' }}>
+        <div style={{ fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', color: FUSION_ACCENT,
+          fontFamily: '"IBM Plex Mono", monospace', marginBottom: 18 }}>◦ {t.eyebrow}</div>
+        <h2 style={{ fontSize: 44, fontWeight: 800, color: FUSION_PRIMARY, letterSpacing: -1.4, margin: 0, lineHeight: 1.08, marginBottom: 50 }}>{t.h}</h2>
+        <div>
+          {t.items.map((it, i) => (
+            <div key={i} style={{ borderTop: '1px solid rgba(11,61,79,.15)', borderBottom: i === t.items.length - 1 ? '1px solid rgba(11,61,79,.15)' : 'none' }}>
+              <button onClick={() => setOpen(open === i ? -1 : i)} style={{
+                width: '100%', background: 'transparent', border: 'none', cursor: 'pointer',
+                padding: '24px 0', textAlign: 'left', display: 'flex', justifyContent: 'space-between', gap: 20, alignItems: 'center',
+                fontFamily: 'inherit'
+              }}>
+                <span style={{ fontSize: 19, fontWeight: 700, color: FUSION_PRIMARY, letterSpacing: -0.3 }}>{it.q}</span>
+                <span style={{ fontSize: 22, color: FUSION_ACCENT, transition: 'transform .2s', transform: open === i ? 'rotate(45deg)' : 'rotate(0)' }}>+</span>
+              </button>
+              <div style={{ maxHeight: open === i ? 200 : 0, overflow: 'hidden', transition: 'max-height .25s' }}>
+                <div style={{ fontSize: 15, color: '#2C4A54', lineHeight: 1.65, paddingBottom: 24, maxWidth: 720 }}>
+                  {it.a}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>);
+}
+
+// ─── APP ────────────────────────────────────────────────────
+function App() {
+  const [lang, setLang] = useLang();
+  const t = lang === 'en' ? {
+    eyebrow: 'Contact', title: 'Build the project', titleAccent: 'together.',
+    sub: 'Send us the brief and we reply within 48 hours. Direct contact, founder-led — no sales funnel.',
+    bc: [{ href: 'index.html', label: 'Home' }, { label: 'Contact' }]
+  } : {
+    eyebrow: 'Contacto', title: 'Construyamos el', titleAccent: 'proyecto juntos.',
+    sub: 'Envíanos el brief y respondemos en menos de 48 horas. Contacto directo con el socio fundador — sin embudo de ventas.',
+    bc: [{ href: 'index.html', label: 'Inicio' }, { label: 'Contacto' }]
+  };
+  return (
+    <React.Fragment>
+      <Header lang={lang} setLang={setLang} current="contacto" />
+      <PageHero eyebrow={t.eyebrow} kicker="04 / 04" title={t.title} titleAccent={t.titleAccent} sub={t.sub} />
+      <Breadcrumb items={t.bc} />
+      <section style={{ background: FUSION_DARK, color: FUSION_INK_LIGHT, padding: '110px 40px', fontFamily: '"Archivo", sans-serif' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80 }}>
+          <ContactForm lang={lang} />
+          <ContactInfo lang={lang} />
+        </div>
+      </section>
+      <FAQ lang={lang} />
+      <Footer lang={lang} />
+    </React.Fragment>);
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

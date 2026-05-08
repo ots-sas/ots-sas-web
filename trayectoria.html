@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Trayectoria · OTS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #0B242C; }
+  body { font-family: "Archivo", sans-serif; color: #0B3D4F; -webkit-font-smoothing: antialiased; }
+  a:hover { opacity: 0.85; }
+  ::selection { background: #C47A3D; color: #fff; }
+  html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" data-presets="react" src="shared.jsx"></script>
+
+<script type="text/babel" data-presets="react">
+
+// ─── TERRITORY CARDS ────────────────────────────────────────
+function TerritorioCards({ lang }) {
+  const t = lang === 'en' ? { prop: 'Formal proposal submitted', gest: 'National engagement', s1: 'Municipalities', s2: 'National calls', s3: 'Departments' } :
+                            { prop: 'Propuesta radicada', gest: 'Gestión nacional', s1: 'Municipios', s2: 'Convocatorias', s3: 'Departamentos' };
+  return (
+    <section style={{ background: FUSION_DARK, color: FUSION_INK_LIGHT, padding: '90px 40px', fontFamily: '"Archivo", sans-serif' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+          {[
+            { codigo: 'TOL', dep: 'Tolima', mun: ['Mariquita', 'Prado'], estado: t.prop, tipo: 'propuesta' },
+            { codigo: 'HUI', dep: 'Huila', mun: ['Campoalegre', 'Paicol', 'San Agustín'], estado: t.prop, tipo: 'propuesta' },
+            { codigo: 'DC', dep: 'Bogotá D.C.', mun: ['Ministerio de Ambiente'], estado: t.gest, tipo: 'gestion' }
+          ].map((r, i) =>
+            <div key={i} style={{
+              background: 'rgba(232,230,220,.04)', border: '1px solid rgba(232,230,220,.1)',
+              padding: '28px 28px 32px', position: 'relative'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 28 }}>
+                <div style={{
+                  fontFamily: '"IBM Plex Mono", monospace',
+                  fontSize: 42, fontWeight: 600, color: r.tipo === 'propuesta' ? FUSION_ACCENT : FUSION_INK_LIGHT,
+                  letterSpacing: -1, lineHeight: 1
+                }}>{r.codigo}</div>
+                <div style={{
+                  width: 10, height: 10, borderRadius: 5,
+                  background: r.tipo === 'propuesta' ? FUSION_ACCENT : FUSION_INK_LIGHT, marginTop: 8
+                }} />
+              </div>
+              <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 14 }}>{r.dep}</div>
+              <div style={{ fontSize: 14, color: 'rgba(232,230,220,.72)', lineHeight: 1.6, marginBottom: 20 }}>{r.mun.join(' · ')}</div>
+              <div style={{
+                fontSize: 10, fontFamily: '"IBM Plex Mono", monospace',
+                textTransform: 'uppercase', letterSpacing: 2,
+                color: r.tipo === 'propuesta' ? FUSION_ACCENT : 'rgba(232,230,220,.6)',
+                paddingTop: 18, borderTop: '1px solid rgba(232,230,220,.1)'
+              }}>{r.estado}</div>
+            </div>
+          )}
+        </div>
+
+        <div style={{ marginTop: 60, paddingTop: 40, borderTop: '1px solid rgba(232,230,220,.12)',
+          display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+          {[['5', t.s1], ['2', t.s2], ['2', t.s3]].map(([n, l], i) =>
+            <div key={i}>
+              <div style={{ fontSize: 56, fontWeight: 800, color: FUSION_ACCENT, letterSpacing: -2, lineHeight: 1 }}>{n}</div>
+              <div style={{ fontSize: 11, color: 'rgba(232,230,220,.6)', marginTop: 12, letterSpacing: 1.5,
+                textTransform: 'uppercase', fontFamily: '"IBM Plex Mono", monospace' }}>{l}</div>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>);
+}
+
+// ─── TIMELINE (cronologia) ──────────────────────────────────
+function Timeline({ lang }) {
+  const t = lang === 'en' ?
+    { eyebrow: 'Timeline', h: 'Every step on the record', sub: 'A complete and transparent record of every engagement, proposal and call participation since founding — nothing inflated, nothing hidden.' } :
+    { eyebrow: 'Línea de tiempo', h: 'Cada paso en el récord', sub: 'Un registro completo y transparente de cada gestión, propuesta y participación desde la fundación — sin inflar y sin esconder.' };
+  const chipFor = (e) => {
+    const map = {
+      'hito': { bg: FUSION_ACCENT, fg: '#fff', label: lang === 'en' ? 'Founding' : 'Fundación' },
+      'en-curso': { bg: 'rgba(11,61,79,.1)', fg: FUSION_PRIMARY, label: lang === 'en' ? 'In progress' : 'En curso' },
+      'presente': { bg: FUSION_DARK, fg: '#fff', label: lang === 'en' ? 'Today' : 'Hoy' }
+    };
+    const c = map[e];
+    return <span style={{ background: c.bg, color: c.fg, padding: '3px 9px', fontSize: 10,
+      fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 600 }}>{c.label}</span>;
+  };
+  return (
+    <section style={{ background: FUSION_BG, padding: '110px 40px', fontFamily: '"Archivo", sans-serif' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: 80, marginBottom: 60, alignItems: 'end' }}>
+          <div>
+            <div style={{ fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', color: FUSION_ACCENT,
+              fontFamily: '"IBM Plex Mono", monospace', marginBottom: 18 }}>◦ {t.eyebrow}</div>
+            <h2 style={{ fontSize: 48, fontWeight: 800, color: FUSION_PRIMARY, letterSpacing: -1.5, margin: 0, lineHeight: 1.05 }}>{t.h}</h2>
+          </div>
+          <p style={{ fontSize: 17, color: '#2C4A54', lineHeight: 1.55, margin: 0 }}>{t.sub}</p>
+        </div>
+        <div style={{ position: 'relative', paddingLeft: 40 }}>
+          <div style={{ position: 'absolute', left: 8, top: 8, bottom: 8, width: 1, background: 'rgba(11,61,79,.18)' }} />
+          {CRONOLOGIA.map((c, i) =>
+            <div key={i} style={{ position: 'relative', paddingBottom: i === CRONOLOGIA.length - 1 ? 0 : 42 }}>
+              <div style={{ position: 'absolute', left: -37, top: 6, width: 17, height: 17, borderRadius: 9,
+                background: FUSION_BG, border: `2px solid ${c.estado === 'hito' ? FUSION_ACCENT : c.estado === 'presente' ? FUSION_PRIMARY : 'rgba(11,61,79,.35)'}`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 6, height: 6, borderRadius: 3,
+                  background: c.estado === 'hito' ? FUSION_ACCENT : c.estado === 'presente' ? FUSION_PRIMARY : 'transparent' }} />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+                <div style={{ fontSize: 12, fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 1.5, color: '#2C4A54', textTransform: 'uppercase' }}>
+                  {lang === 'en' ? c.fecha_en : c.fecha}
+                </div>
+                {chipFor(c.estado)}
+              </div>
+              <div style={{ fontSize: 22, fontWeight: 700, color: FUSION_PRIMARY, letterSpacing: -0.4, lineHeight: 1.25, marginTop: 8 }}>
+                {lang === 'en' ? c.titulo_en : c.titulo}
+              </div>
+              <div style={{ fontSize: 15, color: '#2C4A54', opacity: 0.78, lineHeight: 1.55, marginTop: 8, maxWidth: 660 }}>
+                {lang === 'en' ? c.desc_en : c.desc}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>);
+}
+
+// ─── NEXT-PAGE STRIP ────────────────────────────────────────
+function NextStrip({ lang }) {
+  const t = lang === 'en' ?
+    { l: 'Next', a: 'About us', b: 'The team behind OTS.', cta: 'Continue →' } :
+    { l: 'Sigue', a: 'Nosotros', b: 'El equipo detrás de OTS.', cta: 'Continuar →' };
+  return (
+    <a href="nosotros.html" style={{
+      display: 'block', background: '#fff', padding: '60px 40px', textDecoration: 'none', color: 'inherit',
+      borderTop: '1px solid rgba(11,61,79,.1)', fontFamily: '"Archivo", sans-serif'
+    }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 2fr 1fr',
+        gap: 40, alignItems: 'center' }}>
+        <div style={{ fontSize: 10, fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 2, color: FUSION_ACCENT, textTransform: 'uppercase' }}>
+          {t.l} · 03
+        </div>
+        <div>
+          <div style={{ fontSize: 32, fontWeight: 800, color: FUSION_PRIMARY, letterSpacing: -0.8 }}>{t.a}</div>
+          <div style={{ fontSize: 15, color: '#2C4A54', opacity: 0.78, marginTop: 6 }}>{t.b}</div>
+        </div>
+        <div style={{ justifySelf: 'end', fontSize: 14, fontWeight: 600, color: FUSION_ACCENT }}>{t.cta}</div>
+      </div>
+    </a>);
+}
+
+// ─── APP ────────────────────────────────────────────────────
+function App() {
+  const [lang, setLang] = useLang();
+  const t = lang === 'en' ? {
+    eyebrow: 'Track record', title: 'A young firm,', titleAccent: 'in motion.',
+    sub: 'Founded March 2024. Active proposals across Tolima and Huila, plus national engagement with the Ministry of Environment through two consecutive Macroprojects calls.',
+    bc: [{ href: 'index.html', label: 'Home' }, { label: 'Track record' }]
+  } : {
+    eyebrow: 'Trayectoria', title: 'Una firma joven,', titleAccent: 'en movimiento.',
+    sub: 'Fundada en marzo de 2024. Propuestas activas en Tolima y Huila, más gestión nacional con el Ministerio de Ambiente a través de dos convocatorias consecutivas de Macroproyectos.',
+    bc: [{ href: 'index.html', label: 'Inicio' }, { label: 'Trayectoria' }]
+  };
+  return (
+    <React.Fragment>
+      <Header lang={lang} setLang={setLang} current="trayectoria" />
+      <PageHero eyebrow={t.eyebrow} kicker="02 / 04" title={t.title} titleAccent={t.titleAccent} sub={t.sub} />
+      <Breadcrumb items={t.bc} />
+      <TerritorioCards lang={lang} />
+      <Timeline lang={lang} />
+      <NextStrip lang={lang} />
+      <Footer lang={lang} />
+    </React.Fragment>);
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
