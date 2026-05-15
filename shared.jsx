@@ -139,7 +139,7 @@ function Footer({ lang }) {
         </div>
         <div style={{ marginTop: 24, fontSize: 11, fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 1, color: 'rgba(232,230,220,.4)', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
           <div>© 2024–2026 Ordenamiento Territorial Sostenible S.A.S · {t.rights}</div>
-          <div>NIT · 901.XXX.XXX-X</div>
+          <div>NIT · 901.815.692-3</div>
         </div>
       </div>
     </footer>);
