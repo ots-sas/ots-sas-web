@@ -3,6 +3,30 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- META:INJECTED -->
+<meta name="description" content="Consultoría ambiental y de ordenamiento territorial en Colombia. Formulación de POT, EIA, PMGRD y proyectos de inversión pública. Una firma especializada con 16+ años de práctica." />
+<meta name="keywords" content="ordenamiento territorial, consultoría ambiental, POT, EIA, PMGRD, MGA, Colombia, planificación territorial, OTS, OTS SAS" />
+<meta name="author" content="OTS S.A.S — Ordenamiento Territorial Sostenible" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://ots-sas.netlify.app/" />
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://ots-sas.netlify.app/" />
+<meta property="og:title" content="OTS · Consultoría ambiental y de ordenamiento territorial" />
+<meta property="og:description" content="Consultoría ambiental y de ordenamiento territorial en Colombia. Formulación de POT, EIA, PMGRD y proyectos de inversión pública. Una firma especializada con 16+ años de práctica." />
+<meta property="og:image" content="https://ots-sas.netlify.app/assets/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:site_name" content="OTS · Ordenamiento Territorial Sostenible" />
+<meta property="og:locale" content="es_CO" />
+<meta property="og:locale:alternate" content="en_US" />
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="OTS · Consultoría ambiental y de ordenamiento territorial" />
+<meta name="twitter:description" content="Consultoría ambiental y de ordenamiento territorial en Colombia. Formulación de POT, EIA, PMGRD y proyectos de inversión pública. Una firma especializada con 16+ años de práctica." />
+<meta name="twitter:image" content="https://ots-sas.netlify.app/assets/og-image.png" />
+<!-- /META:INJECTED -->
 <title>OTS · Ordenamiento Territorial Sostenible</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -32,13 +56,13 @@ function HomeHero({ lang }) {
   const t = lang === 'en' ? {
     eyebrow: 'Environmental & territorial consulting · Colombia',
     h1a: 'We plan the', h1b: 'territory', h1c: 'we want to inhabit',
-    sub: 'We formulate, execute and evaluate investment projects in territorial planning and environmental management for local governments, ministries and multilateral agencies.',
-    cta1: 'Explore services', cta2: 'See our work', since: 'Working since March 2024'
+    sub: 'We formulate, execute and evaluate investment projects in territorial planning and environmental management for local governments, ministries and multilateral agencies. Response within 48 hours.',
+    cta1: 'Send us your brief', cta2: 'View services', cta3: 'Download portfolio (PDF)', since: 'Working since March 2024'
   } : {
     eyebrow: 'Consultoría ambiental y territorial · Colombia',
     h1a: 'Planificamos el', h1b: 'territorio', h1c: 'que queremos habitar',
-    sub: 'Formulamos, ejecutamos y evaluamos proyectos de inversión en ordenamiento territorial y gestión ambiental para entes territoriales, ministerios y agencias multilaterales.',
-    cta1: 'Ver servicios', cta2: 'Trayectoria', since: 'Operando desde marzo 2024'
+    sub: 'Formulamos, ejecutamos y evaluamos proyectos de inversión en ordenamiento territorial y gestión ambiental para entes territoriales, ministerios y agencias multilaterales. Respondemos en menos de 48 horas.',
+    cta1: 'Envíanos tu brief', cta2: 'Ver servicios', cta3: 'Descargar portafolio (PDF)', since: 'Operando desde marzo 2024'
   };
   return (
     <section style={{ background: FUSION_DARK, color: FUSION_INK_LIGHT, position: 'relative', overflow: 'hidden',
@@ -67,13 +91,17 @@ function HomeHero({ lang }) {
           {t.sub}
         </p>
         <div style={{ marginTop: 42, display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap' }}>
-          <a href="servicios.html" style={{ background: FUSION_ACCENT, color: '#fff', padding: '14px 22px',
+          <a href="contacto.html" style={{ background: FUSION_ACCENT, color: '#fff', padding: '14px 22px',
             fontSize: 14, fontWeight: 600, textDecoration: 'none', borderRadius: 2 }}>
             {t.cta1} →
           </a>
-          <a href="trayectoria.html" style={{ border: '1px solid rgba(232,230,220,.25)', color: FUSION_INK_LIGHT,
+          <a href="servicios.html" style={{ border: '1px solid rgba(232,230,220,.25)', color: FUSION_INK_LIGHT,
             padding: '13px 22px', fontSize: 14, textDecoration: 'none', borderRadius: 2 }}>
             {t.cta2}
+          </a>
+          <a href="portafolio.html" target="_blank" rel="noopener" style={{ color: 'rgba(232,230,220,.7)',
+            padding: '13px 8px', fontSize: 13, textDecoration: 'none', borderBottom: '1px solid rgba(232,230,220,.25)' }}>
+            ↓ {t.cta3}
           </a>
           <div style={{ marginLeft: 'auto', fontSize: 10, fontFamily: '"IBM Plex Mono", monospace',
             letterSpacing: 1.5, color: 'rgba(232,230,220,.45)' }}>
@@ -219,6 +247,53 @@ function ServiciosPreview({ lang }) {
     </section>);
 }
 
+// ─── HOME · WHY OTS (DIFFERENTIATORS) ──────────────────────
+function PorQueOTS({ lang }) {
+  const t = lang === 'en' ? {
+    eyebrow: 'Why OTS',
+    h: 'Four things you should expect from us.',
+    sub: 'Not slogans — working commitments that shape every engagement.',
+    items: [
+      { n: '01', t: 'Senior partner on every project', d: 'Every engagement is led personally by the founding partner from kickoff through final delivery. No analyst-to-analyst handoffs.' },
+      { n: '02', t: 'Curated network, not inflated payroll', d: 'Specialized associates — environmental engineers, geographers, risk specialists, lawyers — brought in sized to scope, never charged as idle capacity.' },
+      { n: '03', t: '16+ years of practical experience', d: 'Real engagements with public, private and multilateral entities across territorial planning, public investment and environmental management.' },
+      { n: '04', t: 'Field-built diagnoses', d: 'We work in the territory before writing about it. Working tables, site visits, primary sources. No desk-only reports.' }
+    ]
+  } : {
+    eyebrow: '¿Por qué OTS?',
+    h: 'Cuatro cosas que deberías esperar de nosotros.',
+    sub: 'No son frases publicitarias — son compromisos operativos en cada proyecto.',
+    items: [
+      { n: '01', t: 'El socio fundador en cada proyecto', d: 'Cada engagement se lidera personalmente desde la dirección — del kickoff a la entrega final. Sin pases de analista a analista.' },
+      { n: '02', t: 'Red curada, no nómina inflada', d: 'Aliados especializados — ingenieros ambientales, geógrafos, especialistas en riesgo, abogados — vinculados al alcance del proyecto, sin cobrar capacidad ociosa.' },
+      { n: '03', t: '16+ años de práctica real', d: 'Proyectos reales en entidades públicas, privadas y multilaterales en ordenamiento territorial, inversión pública y gestión ambiental.' },
+      { n: '04', t: 'Diagnosticamos en campo', d: 'Trabajamos en el territorio antes de escribir sobre él. Mesas, visitas, fuentes primarias. Sin informes de escritorio.' }
+    ]
+  };
+  return (
+    <section style={{ background: FUSION_DARK2, color: FUSION_INK_LIGHT, padding: '110px 40px', fontFamily: '"Archivo", sans-serif', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 80, alignItems: 'end', marginBottom: 64 }}>
+          <div>
+            <div style={{ fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', color: FUSION_ACCENT,
+              fontFamily: '"IBM Plex Mono", monospace', marginBottom: 18 }}>◦ {t.eyebrow}</div>
+            <h2 style={{ fontSize: 48, fontWeight: 800, letterSpacing: -1.4, margin: 0, lineHeight: 1.08 }}>{t.h}</h2>
+          </div>
+          <p style={{ fontSize: 17, color: 'rgba(232,230,220,.72)', lineHeight: 1.55, margin: 0, maxWidth: 520 }}>{t.sub}</p>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 1, background: 'rgba(232,230,220,.1)', border: '1px solid rgba(232,230,220,.1)' }}>
+          {t.items.map((x) => (
+            <div key={x.n} style={{ background: FUSION_DARK2, padding: '38px 36px' }}>
+              <div style={{ fontSize: 12, color: FUSION_ACCENT, fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 1.8, marginBottom: 18 }}>{x.n}</div>
+              <div style={{ fontSize: 22, fontWeight: 700, color: FUSION_INK_LIGHT, letterSpacing: -0.4, lineHeight: 1.2, marginBottom: 12 }}>{x.t}</div>
+              <div style={{ fontSize: 14.5, color: 'rgba(232,230,220,.7)', lineHeight: 1.6, maxWidth: 460 }}>{x.d}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>);
+}
+
 // ─── HOME · STATS (linking to trayectoria) ──────────────────
 function StatsBand({ lang }) {
   const t = lang === 'en' ? {
@@ -305,6 +380,7 @@ function App() {
       <SectionLinks lang={lang} />
       <ServiciosPreview lang={lang} />
       <StatsBand lang={lang} />
+      <PorQueOTS lang={lang} />
       <ContactStrip lang={lang} />
       <Footer lang={lang} />
     </React.Fragment>);

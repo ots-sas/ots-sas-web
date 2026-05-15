@@ -3,6 +3,30 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- META:INJECTED -->
+<meta name="description" content="Escríbenos. Atendemos consultas de alcaldías, gobernaciones, ministerios, cooperación internacional y empresas privadas. Respuesta en menos de 48 horas." />
+<meta name="keywords" content="ordenamiento territorial, consultoría ambiental, POT, EIA, PMGRD, MGA, Colombia, planificación territorial, OTS, OTS SAS" />
+<meta name="author" content="OTS S.A.S — Ordenamiento Territorial Sostenible" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://ots-sas.netlify.app/contacto.html" />
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://ots-sas.netlify.app/contacto.html" />
+<meta property="og:title" content="Contacto · OTS" />
+<meta property="og:description" content="Escríbenos. Atendemos consultas de alcaldías, gobernaciones, ministerios, cooperación internacional y empresas privadas. Respuesta en menos de 48 horas." />
+<meta property="og:image" content="https://ots-sas.netlify.app/assets/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:site_name" content="OTS · Ordenamiento Territorial Sostenible" />
+<meta property="og:locale" content="es_CO" />
+<meta property="og:locale:alternate" content="en_US" />
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Contacto · OTS" />
+<meta name="twitter:description" content="Escríbenos. Atendemos consultas de alcaldías, gobernaciones, ministerios, cooperación internacional y empresas privadas. Respuesta en menos de 48 horas." />
+<meta name="twitter:image" content="https://ots-sas.netlify.app/assets/og-image.png" />
+<!-- /META:INJECTED -->
 <title>Contacto · OTS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -46,28 +70,39 @@ function ContactForm({ lang }) {
     h: 'Tell us the case',
     sub: 'Writing a call for proposals, evaluating a territorial instrument, or just exploring options? Send the brief — we reply within 48 hours.',
     nameL: 'Name', entityL: 'Entity / organization', emailL: 'Email', msgL: 'Brief description of the need',
-    send: 'Send', sending: 'Sending...', sent: "Message received. We'll reply soon.", errorMsg: "Couldn't send. Please try again or email us directly."
+    send: 'Send', sending: 'Sending...', sent: "Message received. We'll reply soon.", errorMsg: "Couldn't send. Please try again or email us directly.",
+    consent: 'I authorize OTS S.A.S to process my personal data exclusively to respond to my inquiry, in accordance with the',
+    policy: 'data protection policy',
+    consentErr: 'Please authorize the data processing to continue.'
   } : {
     eyebrow: 'Envíanos un brief',
     h: 'Cuéntanos el caso',
     sub: '¿Estás armando una convocatoria, evaluando un instrumento territorial o explorando opciones? Cuéntanos — respondemos en menos de 48 horas.',
     nameL: 'Nombre', entityL: 'Entidad u organización', emailL: 'Correo', msgL: 'Breve descripción de la necesidad',
-    send: 'Enviar', sending: 'Enviando...', sent: 'Mensaje recibido. Te contactamos pronto.', errorMsg: 'No se pudo enviar. Intenta de nuevo o escríbenos directamente al correo.'
+    send: 'Enviar', sending: 'Enviando...', sent: 'Mensaje recibido. Te contactamos pronto.', errorMsg: 'No se pudo enviar. Intenta de nuevo o escríbenos directamente al correo.',
+    consent: 'Autorizo a OTS S.A.S a tratar mis datos personales exclusivamente para atender mi consulta, conforme a la',
+    policy: 'política de tratamiento de datos',
+    consentErr: 'Por favor autoriza el tratamiento de datos para continuar.'
   };
   const [sent, setSent] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
   const [error, setError] = React.useState(false);
+  const [consent, setConsent] = React.useState(false);
+  const [consentErr, setConsentErr] = React.useState(false);
   const onSubmit = async (e) => {
     e.preventDefault();
+    if (!consent) { setConsentErr(true); return; }
+    setConsentErr(false);
     setSubmitting(true);
     setError(false);
     const formEl = e.currentTarget;
     const data = new FormData(formEl);
+    data.append('_consent', 'Autorizado tratamiento de datos personales (Ley 1581) en ' + new Date().toISOString());
     try {
       const resp = await fetch('https://formspree.io/f/xrerryje', {
         method: 'POST', body: data, headers: { 'Accept': 'application/json' }
       });
-      if (resp.ok) { setSent(true); formEl.reset(); } else { setError(true); }
+      if (resp.ok) { setSent(true); formEl.reset(); setConsent(false); } else { setError(true); }
     } catch (err) { setError(true); }
     setSubmitting(false);
   };
@@ -87,6 +122,19 @@ function ContactForm({ lang }) {
             <Field label={t.entityL} name="entity" />
             <Field label={t.emailL} name="email" type="email" />
             <Field label={t.msgL} name="msg" textarea />
+            <label style={{ display: 'flex', gap: 12, alignItems: 'flex-start', marginTop: 8, cursor: 'pointer', fontSize: 12, lineHeight: 1.55, color: 'rgba(232,230,220,.7)' }}>
+              <input type="checkbox" checked={consent} onChange={(e) => { setConsent(e.target.checked); if (e.target.checked) setConsentErr(false); }}
+                style={{ marginTop: 3, accentColor: FUSION_ACCENT, width: 14, height: 14, flexShrink: 0 }} />
+              <span>
+                {t.consent}{' '}
+                <a href="politica-datos.html" target="_blank" rel="noopener" style={{ color: FUSION_ACCENT, textDecoration: 'none', borderBottom: `1px solid ${FUSION_ACCENT}` }}>{t.policy}</a>.
+              </span>
+            </label>
+            {consentErr && !consent &&
+              <div style={{ padding: 12, background: 'rgba(220,80,80,.12)', border: '1px solid rgba(220,80,80,.4)', fontSize: 12, color: '#F4C4C4' }}>
+                ⚠ {t.consentErr}
+              </div>
+            }
             {error &&
               <div style={{ padding: 14, background: 'rgba(220,80,80,.15)', border: '1px solid rgba(220,80,80,.5)', fontSize: 13, color: '#F4C4C4' }}>
                 ⚠ {t.errorMsg}

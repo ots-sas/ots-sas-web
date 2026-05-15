@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Política de Tratamiento de Datos · OTS</title>
+<meta name="description" content="Política de tratamiento de datos personales de OTS S.A.S, conforme a la Ley 1581 de 2012 y el Decreto 1377 de 2013 de Colombia." />
+<meta name="robots" content="index, follow" />
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Política de Tratamiento de Datos · OTS" />
+<meta property="og:description" content="Política de protección de datos personales de OTS S.A.S, conforme a la Ley 1581 de 2012." />
+<meta property="og:image" content="assets/og-image.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #0B242C; }
+  body { font-family: "Archivo", sans-serif; color: #0B3D4F; -webkit-font-smoothing: antialiased; }
+  a:hover { opacity: 0.85; }
+  ::selection { background: #C47A3D; color: #fff; }
+  html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" data-presets="react" src="shared.jsx"></script>
+
+<script type="text/babel" data-presets="react">
+
+function Section({ num, title, children }) {
+  return (
+    <div style={{ paddingTop: 36, paddingBottom: 36, borderTop: '1px solid rgba(11,61,79,.12)' }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 18, marginBottom: 18 }}>
+        <div style={{ fontSize: 13, fontFamily: '"IBM Plex Mono", monospace', color: FUSION_ACCENT, letterSpacing: 1, fontWeight: 500 }}>
+          {num}
+        </div>
+        <h2 style={{ fontSize: 24, fontWeight: 700, color: FUSION_PRIMARY, letterSpacing: -0.5, margin: 0, lineHeight: 1.2 }}>
+          {title}
+        </h2>
+      </div>
+      <div style={{ paddingLeft: 50, fontSize: 15, color: '#2C4A54', lineHeight: 1.7, maxWidth: 760 }}>
+        {children}
+      </div>
+    </div>);
+}
+
+function Policy({ lang }) {
+  if (lang === 'en') {
+    return (
+      <section style={{ background: '#fff', padding: '70px 40px 110px', fontFamily: '"Archivo", sans-serif' }}>
+        <div style={{ maxWidth: 980, margin: '0 auto' }}>
+          <div style={{ fontSize: 12, color: '#5A6B72', fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 1, marginBottom: 22 }}>
+            Last updated: 15 May 2026 · Compliant with Law 1581 of 2012, Decree 1377 of 2013, and Decree 1074 of 2015 (Republic of Colombia)
+          </div>
+          <Section num="01" title="Data controller">
+            <p><strong>ORDENAMIENTO TERRITORIAL SOSTENIBLE S.A.S</strong> (hereinafter, "OTS"), incorporated under Colombian law, identified with NIT 901.815.692-3, with domicile in Bogotá D.C., is the entity responsible for the processing of the personal data covered by this policy.</p>
+            <p style={{ marginTop: 10 }}>Contact for personal-data matters: <a href="mailto:ordenamientoots@gmail.com" style={{ color: FUSION_ACCENT, fontWeight: 600 }}>ordenamientoots@gmail.com</a></p>
+          </Section>
+          <Section num="02" title="Purposes of processing">
+            <p>OTS collects and processes personal data exclusively for the following purposes:</p>
+            <ul>
+              <li>Responding to contact requests submitted through this website.</li>
+              <li>Initiating and managing commercial and contractual relationships.</li>
+              <li>Sending information about services, proposals and engagements requested by the data subject.</li>
+              <li>Complying with legal, regulatory and contractual obligations applicable to OTS.</li>
+            </ul>
+          </Section>
+          <Section num="03" title="Data subject's rights">
+            <p>Under Article 8 of Law 1581 of 2012, the data subject has the right to:</p>
+            <ul>
+              <li>Know, update and rectify their personal data.</li>
+              <li>Request proof of the authorization granted.</li>
+              <li>Be informed about the use given to their personal data.</li>
+              <li>Submit complaints to the Superintendence of Industry and Commerce (SIC) for violations of the law.</li>
+              <li>Revoke authorization and/or request data deletion when applicable.</li>
+              <li>Access their data free of charge.</li>
+            </ul>
+          </Section>
+          <Section num="04" title="How to exercise your rights">
+            <p>To exercise any of the above rights, please send a written request to <a href="mailto:ordenamientoots@gmail.com" style={{ color: FUSION_ACCENT, fontWeight: 600 }}>ordenamientoots@gmail.com</a> including:</p>
+            <ul>
+              <li>Full name and identification number.</li>
+              <li>Description of the facts giving rise to the request.</li>
+              <li>Email and/or physical address for notification.</li>
+              <li>Supporting documents, if applicable.</li>
+            </ul>
+            <p style={{ marginTop: 10 }}>OTS will respond within fifteen (15) business days of receipt.</p>
+          </Section>
+          <Section num="05" title="Storage and security">
+            <p>OTS implements reasonable administrative, technical and physical measures to protect personal data against loss, alteration, unauthorized access or unlawful processing. Data is stored for the time strictly necessary to fulfill the purposes for which it was collected, plus the period required by law.</p>
+          </Section>
+          <Section num="06" title="Transfer and transmission">
+            <p>OTS does not sell, share or transfer personal data to third parties without the prior consent of the data subject, except where required by law or by a court order.</p>
+          </Section>
+          <Section num="07" title="Validity and amendments">
+            <p>This policy enters into force on the date of its publication and remains valid until a new version is issued. Any substantial amendment will be communicated through this website at least ten (10) business days prior to its entry into force.</p>
+          </Section>
+        </div>
+      </section>);
+  }
+  return (
+    <section style={{ background: '#fff', padding: '70px 40px 110px', fontFamily: '"Archivo", sans-serif' }}>
+      <div style={{ maxWidth: 980, margin: '0 auto' }}>
+        <div style={{ fontSize: 12, color: '#5A6B72', fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 1, marginBottom: 22 }}>
+          Última actualización: 15 de mayo de 2026 · Conforme a la Ley 1581 de 2012, el Decreto 1377 de 2013 y el Decreto 1074 de 2015 (República de Colombia)
+        </div>
+        <Section num="01" title="Responsable del tratamiento">
+          <p><strong>ORDENAMIENTO TERRITORIAL SOSTENIBLE S.A.S</strong> (en adelante, "OTS"), sociedad constituida bajo las leyes de Colombia, identificada con el NIT 901.815.692-3, con domicilio en Bogotá D.C., es el responsable del tratamiento de los datos personales que se recopilan en virtud de esta política.</p>
+          <p style={{ marginTop: 10 }}>Contacto para asuntos de datos personales: <a href="mailto:ordenamientoots@gmail.com" style={{ color: FUSION_ACCENT, fontWeight: 600 }}>ordenamientoots@gmail.com</a></p>
+        </Section>
+        <Section num="02" title="Finalidades del tratamiento">
+          <p>OTS recopila y trata datos personales exclusivamente con las siguientes finalidades:</p>
+          <ul>
+            <li>Atender solicitudes de contacto enviadas a través de este sitio web.</li>
+            <li>Iniciar y gestionar relaciones comerciales y contractuales.</li>
+            <li>Enviar información sobre servicios, propuestas y proyectos requeridos por el titular.</li>
+            <li>Cumplir obligaciones legales, regulatorias y contractuales aplicables a OTS.</li>
+          </ul>
+        </Section>
+        <Section num="03" title="Derechos del titular">
+          <p>Conforme al artículo 8 de la Ley 1581 de 2012, el titular tiene derecho a:</p>
+          <ul>
+            <li>Conocer, actualizar y rectificar sus datos personales.</li>
+            <li>Solicitar prueba de la autorización otorgada.</li>
+            <li>Ser informado del uso dado a sus datos personales.</li>
+            <li>Presentar quejas ante la Superintendencia de Industria y Comercio (SIC) por infracciones a la ley.</li>
+            <li>Revocar la autorización y/o solicitar la supresión del dato cuando proceda.</li>
+            <li>Acceder en forma gratuita a sus datos.</li>
+          </ul>
+        </Section>
+        <Section num="04" title="Cómo ejercer sus derechos">
+          <p>Para ejercer cualquiera de los derechos anteriores, envíe una solicitud escrita a <a href="mailto:ordenamientoots@gmail.com" style={{ color: FUSION_ACCENT, fontWeight: 600 }}>ordenamientoots@gmail.com</a> incluyendo:</p>
+          <ul>
+            <li>Nombre completo y documento de identificación.</li>
+            <li>Descripción de los hechos que originan la solicitud.</li>
+            <li>Dirección electrónica y/o física para notificaciones.</li>
+            <li>Documentos de soporte, si aplica.</li>
+          </ul>
+          <p style={{ marginTop: 10 }}>OTS responderá dentro de los quince (15) días hábiles siguientes a la recepción de la solicitud.</p>
+        </Section>
+        <Section num="05" title="Almacenamiento y seguridad">
+          <p>OTS implementa medidas administrativas, técnicas y físicas razonables para proteger los datos personales contra pérdida, alteración, acceso no autorizado o tratamiento ilícito. Los datos se conservan por el tiempo estrictamente necesario para cumplir las finalidades que motivaron su recolección, más el plazo que exija la ley.</p>
+        </Section>
+        <Section num="06" title="Transferencia y transmisión">
+          <p>OTS no vende, comparte ni transfiere datos personales a terceros sin la autorización previa del titular, salvo los casos previstos por la ley o por orden de autoridad judicial competente.</p>
+        </Section>
+        <Section num="07" title="Vigencia y modificaciones">
+          <p>Esta política entra en vigor en la fecha de su publicación y se mantiene vigente hasta que se publique una nueva versión. Cualquier modificación sustancial se comunicará a través de este sitio web con al menos diez (10) días hábiles de antelación a su entrada en vigor.</p>
+        </Section>
+      </div>
+    </section>);
+}
+
+function App() {
+  const [lang, setLang] = useLang();
+  const t = lang === 'en' ? {
+    eyebrow: 'Legal', title: 'Personal data', titleAccent: 'protection policy.',
+    sub: 'OTS S.A.S protects personal data in accordance with Colombian Law 1581 of 2012 and its complementary regulations. This document sets out our commitments and your rights.',
+    bc: [{ href: 'index.html', label: 'Home' }, { label: 'Data protection' }]
+  } : {
+    eyebrow: 'Legal', title: 'Política de tratamiento', titleAccent: 'de datos personales.',
+    sub: 'OTS S.A.S protege los datos personales conforme a la Ley 1581 de 2012 y normas complementarias de la República de Colombia. Este documento expone nuestros compromisos y sus derechos.',
+    bc: [{ href: 'index.html', label: 'Inicio' }, { label: 'Política de datos' }]
+  };
+  return (
+    <React.Fragment>
+      <Header lang={lang} setLang={setLang} current="" />
+      <PageHero eyebrow={t.eyebrow} title={t.title} titleAccent={t.titleAccent} sub={t.sub} />
+      <Breadcrumb items={t.bc} />
+      <Policy lang={lang} />
+      <Footer lang={lang} />
+    </React.Fragment>);
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

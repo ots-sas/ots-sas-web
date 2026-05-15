@@ -102,11 +102,43 @@ function Header({ lang, setLang, current }) {
     </header>);
 }
 
-// ─── FOOTER ─────────────────────────────────────────────────
+// ─── FOOTER ─────────────────────────────────────────────
+const SOCIAL = {
+  linkedin: 'https://www.linkedin.com/company/100469055/',
+  instagram: 'https://www.instagram.com/ot.sost/',
+  card: 'https://truelinc.co/detail/6g23mIfPbT?truelincqrid=6g23mIfPbT'
+};
+
+function SocialIcon({ kind, size = 16 }) {
+  if (kind === 'linkedin') return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zm1.78 13.02H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0z"/></svg>
+  );
+  if (kind === 'instagram') return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="18" cy="6" r="1" fill="currentColor"/></svg>
+  );
+  if (kind === 'mail') return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+  );
+  return null;
+}
+
+function SocialBtn({ href, label, kind }) {
+  return (
+    <a href={href} target="_blank" rel="noopener" aria-label={label}
+      style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(232,230,220,.06)', color: 'rgba(232,230,220,.75)', borderRadius: 2, transition: 'all .15s', textDecoration: 'none' }}
+      onMouseEnter={(e)=>{e.currentTarget.style.background=FUSION_ACCENT;e.currentTarget.style.color='#fff';}}
+      onMouseLeave={(e)=>{e.currentTarget.style.background='rgba(232,230,220,.06)';e.currentTarget.style.color='rgba(232,230,220,.75)';}}>
+      <SocialIcon kind={kind} />
+    </a>);
+}
+
 function Footer({ lang }) {
   const t = lang === 'en' ?
-    { rights: 'All rights reserved', tag: 'Environmental & territorial planning consultancy', nav: 'Navigate', contact: 'Contact', services: 'Services', trayectoria: 'Track record', about: 'About', back: 'Back to top' } :
-    { rights: 'Todos los derechos reservados', tag: 'Consultoría ambiental y de ordenamiento territorial', nav: 'Navegar', contact: 'Contacto', services: 'Servicios', trayectoria: 'Trayectoria', about: 'Nosotros', back: 'Volver arriba' };
+    { rights: 'All rights reserved', tag: 'Environmental & territorial planning consultancy', nav: 'Navigate', contact: 'Contact', services: 'Services', trayectoria: 'Track record', about: 'About', back: 'Back to top', legal: 'Legal', policy: 'Data protection policy', portfolio: 'Portfolio (PDF)', follow: 'Follow us' } :
+    { rights: 'Todos los derechos reservados', tag: 'Consultoría ambiental y de ordenamiento territorial', nav: 'Navegar', contact: 'Contacto', services: 'Servicios', trayectoria: 'Trayectoria', about: 'Nosotros', back: 'Volver arriba', legal: 'Legal', policy: 'Política de tratamiento de datos', portfolio: 'Portafolio (PDF)', follow: 'Síguenos' };
+
+  const linkSty = { fontSize: 13, color: 'rgba(232,230,220,.7)', textDecoration: 'none' };
+  const labelSty = { fontSize: 10, color: 'rgba(232,230,220,.4)', fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 14 };
 
   return (
     <footer style={{ background: '#07181F', color: 'rgba(232,230,220,.55)', padding: '70px 40px 28px', fontFamily: '"Archivo", sans-serif' }}>
@@ -115,24 +147,36 @@ function Footer({ lang }) {
           <div>
             <FusionLockup onDark />
             <div style={{ fontSize: 13, color: 'rgba(232,230,220,.55)', marginTop: 18, lineHeight: 1.6, maxWidth: 320 }}>{t.tag}</div>
-          </div>
-          <div>
-            <div style={{ fontSize: 10, color: 'rgba(232,230,220,.4)', fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 14 }}>{t.nav}</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <a href="servicios.html" style={{ fontSize: 13, color: 'rgba(232,230,220,.7)', textDecoration: 'none' }}>{t.services}</a>
-              <a href="trayectoria.html" style={{ fontSize: 13, color: 'rgba(232,230,220,.7)', textDecoration: 'none' }}>{t.trayectoria}</a>
-              <a href="nosotros.html" style={{ fontSize: 13, color: 'rgba(232,230,220,.7)', textDecoration: 'none' }}>{t.about}</a>
-              <a href="contacto.html" style={{ fontSize: 13, color: 'rgba(232,230,220,.7)', textDecoration: 'none' }}>{t.contact}</a>
+            <div style={{ marginTop: 22 }}>
+              <div style={labelSty}>{t.follow}</div>
+              <div style={{ display: 'flex', gap: 10 }}>
+                <SocialBtn href={SOCIAL.linkedin} label="LinkedIn" kind="linkedin" />
+                <SocialBtn href={SOCIAL.instagram} label="Instagram" kind="instagram" />
+                <SocialBtn href="mailto:ordenamientoots@gmail.com" label="Email" kind="mail" />
+              </div>
             </div>
           </div>
           <div>
-            <div style={{ fontSize: 10, color: 'rgba(232,230,220,.4)', fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 14 }}>{t.contact}</div>
-            <a href="mailto:ordenamientoots@gmail.com" style={{ fontSize: 13, color: 'rgba(232,230,220,.7)', textDecoration: 'none', display: 'block', marginBottom: 8 }}>ordenamientoots@gmail.com</a>
-            <div style={{ fontSize: 13, color: 'rgba(232,230,220,.55)' }}>Bogotá · Colombia</div>
+            <div style={labelSty}>{t.nav}</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <a href="servicios.html" style={linkSty}>{t.services}</a>
+              <a href="trayectoria.html" style={linkSty}>{t.trayectoria}</a>
+              <a href="nosotros.html" style={linkSty}>{t.about}</a>
+              <a href="contacto.html" style={linkSty}>{t.contact}</a>
+              <a href="portafolio.html" style={linkSty}>{t.portfolio}</a>
+            </div>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+          <div>
+            <div style={labelSty}>{t.contact}</div>
+            <a href="mailto:ordenamientoots@gmail.com" style={{ ...linkSty, display: 'block', marginBottom: 8 }}>ordenamientoots@gmail.com</a>
+            <div style={{ fontSize: 13, color: 'rgba(232,230,220,.55)' }}>Bogotá · Colombia</div>
+            <div style={{ fontSize: 12, color: 'rgba(232,230,220,.4)', marginTop: 10, fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 0.5 }}>NIT 901.815.692-3</div>
+          </div>
+          <div>
+            <div style={labelSty}>{t.legal}</div>
+            <a href="politica-datos.html" style={{ ...linkSty, display: 'block', marginBottom: 18, lineHeight: 1.45 }}>{t.policy}</a>
             <a href="#top" onClick={(e)=>{e.preventDefault();window.scrollTo({top:0,behavior:'smooth'});}}
-              style={{ fontSize: 11, fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 1.5, color: 'rgba(232,230,220,.7)', textDecoration: 'none', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 6 }}>
+              style={{ fontSize: 11, fontFamily: '"IBM Plex Mono", monospace', letterSpacing: 1.5, color: 'rgba(232,230,220,.7)', textDecoration: 'none', textTransform: 'uppercase', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
               ↑ {t.back}
             </a>
           </div>
